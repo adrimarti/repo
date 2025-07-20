@@ -4,47 +4,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CASTASOUND</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }body {
-  margin: 0;
-  padding: 0;
-  background: black;
-  color: white;
-  font-family: 'Courier New', Courier, monospace;
-  overflow: hidden;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.background {
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: white;
+      font-family: 'Courier New', Courier, monospace;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }.background {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: url('https://images.unsplash.com/photo-1604023517321-58b69e1942f8?auto=format&fit=crop&w=1920&q=80') no-repeat center center;
   background-size: cover;
-  z-index: -2;
   filter: brightness(0.4) blur(2px);
+  z-index: -2;
   animation: zoom 20s ease-in-out infinite alternate;
-}
-
-.bill {
-  position: absolute;
-  top: -10%;
-  left: 50%;
-  width: 60px;
-  height: 30px;
-  background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/US_%24100_bill_obverse_series_2009.jpg/320px-US_%24100_bill_obverse_series_2009.jpg') no-repeat center center;
-  background-size: cover;
-  opacity: 0.1;
-  transform: rotate(-20deg);
-  animation: floatDown 10s infinite linear;
-  z-index: -1;
 }
 
 @keyframes zoom {
@@ -52,43 +34,20 @@
   to { transform: scale(1.05); }
 }
 
-@keyframes floatDown {
-  0% { top: -10%; left: 40%; opacity: 0.1; }
-  50% { transform: rotate(0deg); opacity: 0.15; }
-  100% { top: 110%; left: 60%; opacity: 0; }
-}
-
 .overlay {
   text-align: center;
   padding: 2rem;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 1rem;
-  box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
-  animation: epicFadeIn 2.5s ease-out forwards;
   max-width: 90vw;
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
 }
 
 h1 {
   font-size: 8vw;
-  line-height: 1.1;
-  letter-spacing: 0.2rem;
-  margin: 0;
-  text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
-  animation: titleZoom 3s ease-in-out forwards;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@keyframes titleZoom {
-  0% {
-    opacity: 0;
-    transform: scale(0.8) translateY(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
+  margin: 0;
 }
 
 .fade-text {
@@ -103,58 +62,36 @@ h1 {
   40%, 60% { opacity: 1; }
 }
 
-@keyframes epicFadeIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.9) rotateX(10deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotateX(0);
-  }
-}
-
-.spotify-icon {
-  position: absolute;
+.spotify-link {
+  position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 999;
+}
+
+.spotify-link img {
   width: 48px;
   height: 48px;
-  opacity: 1;
-  z-index: 10;
+  display: block;
 }
 
-.spotify-icon:hover {
-  filter: drop-shadow(0 0 6px #1ed760);
-  transform: scale(1.1);
-}
-
-@media screen and (max-width: 480px) {
-  h1 {
-    font-size: 10vw;
-  }
-  .fade-text {
-    font-size: 5vw;
-  }
-  .spotify-icon {
-    bottom: 15px;
-    right: 15px;
-    width: 42px;
-    height: 42px;
-  }
+@media screen and (max-width: 600px) {
+  h1 { font-size: 10vw; }
+  .fade-text { font-size: 5vw; }
+  .spotify-link img { width: 44px; height: 44px; }
+  .spotify-link { bottom: 16px; right: 16px; }
 }
 
   </style>
 </head>
 <body>
   <div class="background"></div>
-  <div class="bill"></div>
   <div class="overlay">
     <h1>CASTASOUND</h1>
     <div class="fade-text">algo se juega en el bosque...</div>
   </div>
-  <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY" target="_blank" rel="noopener">
-    <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/2111/2111624.png" alt="Spotify" />
+  <a class="spotify-link" href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY" target="_blank" rel="noopener">
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
   </a>
 </body>
 </html>
