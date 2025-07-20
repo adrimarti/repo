@@ -99,7 +99,7 @@ h1 {
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
+  0%, 100% { opacity: 0.3; }
   40%, 60% { opacity: 1; }
 }
 
@@ -120,10 +120,10 @@ h1 {
   right: 20px;
   width: 32px;
   height: 32px;
-  opacity: 0;
   animation: fadeInOut 6s infinite;
   filter: drop-shadow(0 0 3px #1ed760);
   transition: transform 0.3s ease;
+  z-index: 1;
 }
 
 .spotify-icon:hover {
