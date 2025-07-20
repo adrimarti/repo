@@ -9,7 +9,7 @@
     }body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #000000, #0a0a0a);
+  background: black;
   color: white;
   font-family: 'Courier New', Courier, monospace;
   overflow: hidden;
@@ -47,31 +47,34 @@
   background: rgba(0, 0, 0, 0.5);
   border-radius: 1rem;
   box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
-  animation: fadeIn 2s ease forwards;
+  animation: epicFadeIn 2.5s ease-out forwards;
   max-width: 90vw;
 }
 
 h1 {
-  font-size: 10vw;
-  letter-spacing: 0.3rem;
+  font-size: 8vw;
+  line-height: 1.1;
+  letter-spacing: 0.2rem;
   margin: 0;
   text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
-  animation: glowPulse 3s infinite ease-in-out;
-  word-wrap: break-word;
+  animation: titleZoom 3s ease-in-out forwards;
+  word-break: break-word;
 }
 
-@keyframes glowPulse {
-  0%, 100% {
-    text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
+@keyframes titleZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(40px);
   }
-  50% {
-    text-shadow: 0 0 10px #0ff, 0 0 20px #f0f, 0 0 40px #0ff;
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }
 
 .fade-text {
   margin-top: 1.5rem;
-  font-size: 4vw;
+  font-size: 4.5vw;
   color: rgba(255, 255, 255, 0.6);
   animation: fadeInOut 6s infinite;
 }
@@ -81,14 +84,20 @@ h1 {
   40%, 60% { opacity: 1; }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes epicFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) rotateX(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateX(0);
+  }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 480px) {
   h1 {
-    font-size: 12vw;
+    font-size: 10vw;
   }
   .fade-text {
     font-size: 5vw;
