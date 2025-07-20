@@ -120,13 +120,14 @@ h1 {
   right: 20px;
   width: 32px;
   height: 32px;
-  opacity: 0.5;
-  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeInOut 6s infinite;
+  filter: drop-shadow(0 0 3px #1ed760);
+  transition: transform 0.3s ease;
 }
 
 .spotify-icon:hover {
-  opacity: 1;
-  filter: drop-shadow(0 0 5px #1ed760);
+  transform: scale(1.1);
 }
 
 @media screen and (max-width: 480px) {
@@ -153,7 +154,7 @@ h1 {
     <h1>CASTASOUND</h1>
     <div class="fade-text">algo se juega en el bosque...</div>
   </div>
-  <a href="https://open.spotify.com/playlist/tu_playlist" target="_blank" rel="noopener">
+  <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY" target="_blank" rel="noopener">
     <img class="spotify-icon" src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" alt="Spotify" />
   </a>
 </body>
