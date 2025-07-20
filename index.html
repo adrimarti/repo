@@ -48,14 +48,16 @@
   border-radius: 1rem;
   box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
   animation: fadeIn 2s ease forwards;
+  max-width: 90vw;
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 10vw;
   letter-spacing: 0.3rem;
   margin: 0;
   text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
   animation: glowPulse 3s infinite ease-in-out;
+  word-wrap: break-word;
 }
 
 @keyframes glowPulse {
@@ -69,7 +71,7 @@ h1 {
 
 .fade-text {
   margin-top: 1.5rem;
-  font-size: 1.1rem;
+  font-size: 4vw;
   color: rgba(255, 255, 255, 0.6);
   animation: fadeInOut 6s infinite;
 }
@@ -86,10 +88,10 @@ h1 {
 
 @media screen and (max-width: 600px) {
   h1 {
-    font-size: 2.2rem;
+    font-size: 12vw;
   }
   .fade-text {
-    font-size: 1rem;
+    font-size: 5vw;
   }
 }
 
