@@ -4,15 +4,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CASTASOUND</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #000000, #0a0a0a);
-      color: white;
-      font-family: 'Courier New', Courier, monospace;
-      overflow: hidden;
-      height: 100vh;
-    }.background {
+    * {
+      box-sizing: border-box;
+    }body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #000000, #0a0a0a);
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.background {
   position: fixed;
   top: 0;
   left: 0;
@@ -22,35 +29,47 @@
   background-size: cover;
   z-index: -2;
   filter: brightness(0.4) blur(2px);
+  animation: zoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
 }
 
 .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.1), rgba(0,0,0,0.9));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   text-align: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
+  animation: fadeIn 2s ease forwards;
 }
 
 h1 {
-  font-size: 4rem;
-  letter-spacing: 0.4rem;
+  font-size: 3rem;
+  letter-spacing: 0.3rem;
   margin: 0;
+  text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
+  animation: glowPulse 3s infinite ease-in-out;
 }
 
-.glow {
-  text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
+  }
+  50% {
+    text-shadow: 0 0 10px #0ff, 0 0 20px #f0f, 0 0 40px #0ff;
+  }
 }
 
 .fade-text {
-  margin-top: 20px;
-  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.6);
   animation: fadeInOut 6s infinite;
 }
@@ -60,12 +79,26 @@ h1 {
   40%, 60% { opacity: 1; }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+  .fade-text {
+    font-size: 1rem;
+  }
+}
+
   </style>
 </head>
 <body>
   <div class="background"></div>
   <div class="overlay">
-    <h1 class="glow">CASTASOUND</h1>
+    <h1>CASTASOUND</h1>
     <div class="fade-text">algo se juega en el bosque...</div>
   </div>
 </body>
