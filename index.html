@@ -32,13 +32,29 @@
   animation: zoom 20s ease-in-out infinite alternate;
 }
 
+.bill {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: 60px;
+  height: 30px;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/US_%24100_bill_obverse_series_2009.jpg/320px-US_%24100_bill_obverse_series_2009.jpg') no-repeat center center;
+  background-size: cover;
+  opacity: 0.1;
+  transform: rotate(-20deg);
+  animation: floatDown 10s infinite linear;
+  z-index: -1;
+}
+
 @keyframes zoom {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.05);
-  }
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+@keyframes floatDown {
+  0% { top: -10%; left: 40%; opacity: 0.1; }
+  50% { transform: rotate(0deg); opacity: 0.15; }
+  100% { top: 110%; left: 60%; opacity: 0; }
 }
 
 .overlay {
@@ -110,6 +126,7 @@ h1 {
 </head>
 <body>
   <div class="background"></div>
+  <div class="bill"></div>
   <div class="overlay">
     <h1>CASTASOUND</h1>
     <div class="fade-text">algo se juega en el bosque...</div>
