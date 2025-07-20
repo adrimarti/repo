@@ -62,24 +62,35 @@ h1 {
   40%, 60% { opacity: 1; }
 }
 
-.spotify-link {
+.spotify-text-link {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 999;
+  bottom: 16px;
+  right: 16px;
+  z-index: 10;
+  font-size: 0.9rem;
+  color: #1ed760;
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px #1ed76044;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.spotify-link img {
-  width: 48px;
-  height: 48px;
-  display: block;
+.spotify-text-link:hover {
+  background: rgba(30, 215, 96, 0.2);
+  color: #fff;
 }
 
 @media screen and (max-width: 600px) {
   h1 { font-size: 10vw; }
   .fade-text { font-size: 5vw; }
-  .spotify-link img { width: 44px; height: 44px; }
-  .spotify-link { bottom: 16px; right: 16px; }
+  .spotify-text-link {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+    bottom: 12px;
+    right: 12px;
+  }
 }
 
   </style>
@@ -90,8 +101,8 @@ h1 {
     <h1>CASTASOUND</h1>
     <div class="fade-text">algo se juega en el bosque...</div>
   </div>
-  <a class="spotify-link" href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY" target="_blank" rel="noopener">
-    <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
+  <a class="spotify-text-link" href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY" target="_blank" rel="noopener">
+    🎧 Escucha la playlist
   </a>
 </body>
 </html>
