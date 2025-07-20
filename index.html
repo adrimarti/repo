@@ -58,7 +58,9 @@ h1 {
   margin: 0;
   text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
   animation: titleZoom 3s ease-in-out forwards;
-  word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @keyframes titleZoom {
