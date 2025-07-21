@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subasta Castasound</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, #000000, #0a0a0a);
+    }h1 {
+  margin-top: 2rem;
+  font-size: 3rem;
+  text-shadow: 0 0 10px #0ff, 0 0 20px #f0f;
+}
+
+.lotes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.lote {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s;
+}
+
+.lote:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px #1ed760;
+}
+
+.lote img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.lote h2 {
+  font-size: 1.3rem;
+  margin: 0.5rem 0;
+  color: #1ed760;
+}
+
+.lote p {
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+@media screen and (max-width: 600px) {
+  h1 { font-size: 2rem; }
+}
+
+  </style>
+</head>
+<body>
+  <h1>Lotes en Subasta 🎁</h1>
+  <div class="lotes-container">
+    <div class="lote">
+      <img src="https://via.placeholder.com/300x180?text=Lote+1" alt="Lote 1" />
+      <h2>Lote 1: Caja Misteriosa</h2>
+      <p>Contenido secreto que solo se revelará al ganador. ¿Te atreves?</p>
+    </div>
+    <div class="lote">
+      <img src="https://via.placeholder.com/300x180?text=Lote+2" alt="Lote 2" />
+      <h2>Lote 2: Experiencia VIP</h2>
+      <p>Pase directo para el primer brindis de la noche + regalo sorpresa.</p>
+    </div>
+    <div class="lote">
+      <img src="https://via.placeholder.com/300x180?text=Lote+3" alt="Lote 3" />
+      <h2>Lote 3: Casta-Cóctel</h2>
+      <p>Un cóctel único creado solo para Castasound. Ingredientes exclusivos.</p>
+    </div>
+    <!-- Puedes duplicar más bloques "lote" según la cantidad de premios -->
+  </div>
+</body>
+</html>
