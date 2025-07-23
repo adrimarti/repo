@@ -146,6 +146,135 @@
       pointer-events: none;
       z-index: 1;
     }
+
+    .mystery-fab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 70px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(20, 4, 38, 0.96);
+      border: 2px solid #a24aff;
+      box-shadow: 0 0 26px 6px #a24aff66;
+      color: #a24aff;
+      font-size: 2.6rem;
+      z-index: 100;
+      cursor: pointer;
+      transition: box-shadow 0.2s, background 0.22s, transform 0.14s;
+      animation: fab-pulse 2.4s infinite alternate;
+    }
+
+    .mystery-fab:hover {
+      box-shadow: 0 0 48px 14px #a24affcc;
+      background: #2a064a;
+      transform: translateX(-50%) scale(1.09);
+    }
+
+    @keyframes fab-pulse {
+      0% {
+        box-shadow: 0 0 28px 8px #a24aff66;
+      }
+
+      100% {
+        box-shadow: 0 0 46px 22px #a24affbb;
+      }
+    }
+
+    .mystery-icon {
+      filter: drop-shadow(0 0 10px #a24affcc);
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      letter-spacing: 2px;
+      font-size: 2.5rem;
+    }
+
+    /* POPUP STYLES */
+    .mystery-popup-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 3, 25, 0.95);
+      backdrop-filter: blur(3px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popup-fadein 0.6s;
+    }
+
+    @keyframes popup-fadein {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .mystery-popup-content {
+      background: rgba(30, 8, 56, 0.96);
+      border: 2.5px solid #a24aff;
+      border-radius: 20px;
+      box-shadow: 0 0 36px 7px #a24aff77, 0 0 120px 30px #1a072e22;
+      color: #fff;
+      padding: 2.2rem 2rem 1.6rem 2rem;
+      min-width: 270px;
+      max-width: 88vw;
+      text-align: center;
+      position: relative;
+      animation: popup-zoom 0.5s cubic-bezier(.43, 1.7, .36, 1) both;
+    }
+
+    @keyframes popup-zoom {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .mystery-popup-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
+      border: none;
+      color: #a24aff;
+      font-size: 2.1rem;
+      cursor: pointer;
+      filter: drop-shadow(0 0 8px #a24affbb);
+      transition: color 0.17s;
+    }
+
+    .mystery-popup-close:hover {
+      color: #fff;
+      background: none;
+    }
+
+    .mystery-popup-content h2 {
+      color: #a24aff;
+      text-shadow: 0 0 8px #a24aff, 0 0 20px #0e051a;
+      margin-top: 0;
+      margin-bottom: 0.6em;
+    }
+
+    .mystery-popup-inner {
+      font-size: 1.14rem;
+      color: #eee;
+      margin-bottom: 0.5em;
+    }
   </style>
 </head>
 
@@ -158,12 +287,40 @@
     </div>
     <div class="fade-text">algo se juega en el bosque...</div>
   </div>
+  <!-- Botón flotante misterioso -->
+  <button class="mystery-fab" id="open-mystery-popup" title="¿Misterio?">
+    <span class="mystery-icon">✦</span>
+  </button>
   <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY" target="_blank" rel="noopener">
     <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
   </a>
+  <div id="mystery-popup-bg" class="mystery-popup-bg" style="display:none;">
+    <div class="mystery-popup-content">
+      <button class="mystery-popup-close" id="close-mystery-popup">&times;</button>
+      <h2>¿Misterio?</h2>
+      <div class="mystery-popup-inner">
+        <!-- Aquí puedes meter lo que quieras: pistas, reglas secretas, etc -->
+        <p>Pronto se revelará una sorpresa en Castasound...</p>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 <script>
+  // POPUP MISTERIO
+  document.getElementById('open-mystery-popup').onclick = function () {
+    document.getElementById('mystery-popup-bg').style.display = 'flex';
+  };
+  document.getElementById('close-mystery-popup').onclick = function () {
+    document.getElementById('mystery-popup-bg').style.display = 'none';
+  };
+  // Opcional: cerrar popup haciendo clic fuera del contenido
+  document.getElementById('mystery-popup-bg').onclick = function (e) {
+    if (e.target === this) this.style.display = 'none';
+  };
+
+  // COUNTDOWN
   // FECHA DEL EVENTO:
   const fechaEvento = new Date("2025-07-26T18:00:00"); // Cambia aquí tu fecha/hora
 
@@ -206,6 +363,7 @@
     }
     mostrandoTitulo = !mostrandoTitulo;
   }, 7000);
+
 </script>
 
 </html>
