@@ -187,32 +187,33 @@
     <script>
         const eventos = {
             viernes: [
-                { hora: '17:10', top: 60, titulo: 'Llegada 🎒', detalle: 'Acreditación y bienvenida' },
-                { hora: '18:00', top: 160, titulo: 'Check-in tiendas ⛺', detalle: 'Montaje libre' },
-                { hora: '19:00', top: 260, titulo: 'Aperitivos 🥨', detalle: 'Picoteo general' },
-                { hora: '20:00', top: 60, titulo: 'Apertura ✨', detalle: 'Inauguración oficial' },
-                { hora: '21:00', top: 160, titulo: 'Photocall 📸', detalle: 'Fotos y disfraces' },
-                { hora: '22:00', top: 260, titulo: 'Blackjack ♠️', detalle: 'Mesa abierta' },
-                { hora: '23:00', top: 60, titulo: 'DJ Set 🎧', detalle: 'Luces y sonido' },
-                { hora: '00:00', top: 160, titulo: 'Barra libre 🍹', detalle: 'Cocktails y más' },
-                { hora: '01:00', top: 260, titulo: 'Ruleta 🎯', detalle: 'Juegos en mesa' },
-                { hora: '02:00', top: 60, titulo: 'Piano en vivo 🎹', detalle: 'Ambiente chill' },
-                { hora: '03:00', top: 160, titulo: 'Bingo 💸', detalle: 'Premios sorpresa' },
-                { hora: '04:00', top: 260, titulo: 'Afterhour 🌅', detalle: 'Vuelta al campamento' }
+                { hora: '17:10', duracion: 50, top: 60, titulo: 'Llegada 🎒', detalle: 'Acreditación y bienvenida' },
+                { hora: '18:00', duracion: 60, top: 160, titulo: 'Check-in Campismo ⛺', detalle: 'Montaje libre' },
+                { hora: '19:30', duracion: 60, top: 60, titulo: 'Aperitivos 🥨', detalle: 'Picoteo general' },
+                { hora: '20:00', duracion: 45, top: 160, titulo: 'Apertura ✨', detalle: 'Inauguración oficial' },
+                { hora: '21:15', duracion: 45, top: 160, titulo: 'Photocall 📸', detalle: 'Fotos y disfraces' },
+                { hora: '21:30', duracion: 120, top: 60, titulo: 'DJ Set 🎧', detalle: 'Sesión vermut' },
+                { hora: '22:00', duracion: 200, top: 260, titulo: 'Barra libre 🍹', detalle: 'Cocktails y más' },
+                { hora: '00:00', duracion: 45, top: 60, titulo: 'Primer Juego 💸', detalle: 'Premios sorpresa' },
+                { hora: '01:15', duracion: 50, top: 60, titulo: 'Karaoke 🎤', detalle: 'A cantar!' },
+                { hora: '02:00', duracion: 120, top: 160, titulo: 'Rave 🎹', detalle: 'De chill' },
+                { hora: '04:00', duracion: 160, top: 60, titulo: 'Afterhour 🌅', detalle: '...' }
             ],
             sabado: [
-                { hora: '17:10', top: 60, titulo: 'Desayuno tardío 🥐', detalle: 'Café y bollería' },
-                { hora: '18:00', top: 160, titulo: 'Yoga 🧘', detalle: 'Sesión de estiramientos' },
-                { hora: '19:00', top: 260, titulo: 'Mercadillo 🛍️', detalle: 'Trueque entre asistentes' },
-                { hora: '20:00', top: 60, titulo: 'Concurso talentos 🎭', detalle: 'Show en vivo' },
-                { hora: '21:00', top: 160, titulo: 'Póker 🃏', detalle: 'Partidas intensas' },
-                { hora: '22:00', top: 260, titulo: 'Cena 🍛', detalle: 'Buffet libre' },
-                { hora: '23:00', top: 60, titulo: 'DJ Set 2 🎶', detalle: 'Electrónica y luces' },
-                { hora: '00:00', top: 160, titulo: 'Subasta final 🏆', detalle: 'Premios especiales' },
-                { hora: '01:00', top: 260, titulo: 'Fogata 🔥', detalle: 'Historias y música' },
-                { hora: '02:00', top: 60, titulo: 'Cierre bar 🎬', detalle: 'Últimos tragos' },
-                { hora: '03:00', top: 160, titulo: 'Descanso 😴', detalle: 'Chillout y relax' },
-                { hora: '04:00', top: 260, titulo: 'Despedida 💜', detalle: 'Últimos abrazos' }
+                { hora: '17:10', duracion: 60, top: 60, titulo: 'Desayuno tardío 🥐', detalle: 'Café y bollería' },
+                { hora: '18:00', duracion: 60, top: 260, titulo: 'DJ Set 2 🎶', detalle: 'Ambiente' },
+                { hora: '18:30', duracion: 60, top: 60, titulo: 'Presentación 📢', detalle: 'Bienvenida y explicación' },
+                { hora: '20:00', duracion: 170, top: 60, titulo: 'Juegos ❓', detalle: '???' },
+                { hora: '20:05', duracion: 170, top: 160, titulo: 'y Mas juegos ❓', detalle: '???' },
+                { hora: '20:00', duracion: 200, top: 260, titulo: 'DJ Set 3 🎶', detalle: '...' },
+                { hora: '22:00', duracion: 40, top: 360, titulo: 'Cena 🍛', detalle: '...' },
+                { hora: '23:15', duracion: 50, top: 60, titulo: 'Concurso talentos 🎭', detalle: 'Got Talent Castadon' },
+                { hora: '00:15', duracion: 50, top: 160, titulo: 'Subasta final 🏆', detalle: 'Premios especiales' },
+                { hora: '01:00', duracion: 50, top: 60, titulo: 'Fogata 🔥', detalle: 'y charloteo' },
+                { hora: '01:30', duracion: 120, top: 160, titulo: 'Rave 🎹', detalle: 'De chill' },
+                { hora: '03:30', duracion: 50, top: 260, titulo: 'Despedida 💜', detalle: 'Últimos abrazos' },
+                { hora: '04:00', duracion: 160, top: 60, titulo: 'Afterhour 🌅', detalle: '...' },
+                { hora: '06:00', duracion: 50, top: 260, titulo: 'Cierre bar 🎬', detalle: 'Últimos tragos y limpieza' }
             ]
         };
 
@@ -227,15 +228,24 @@
             eventos[dia].forEach(ev => {
                 const div = document.createElement('div');
                 div.className = 'event';
+
+                // Calcular left
                 const [h, m] = ev.hora.split(':').map(Number);
                 let horaDecimal = h + m / 60;
-                if (horaDecimal < 17) horaDecimal += 24;
+                if (horaDecimal < 17) horaDecimal += 24; // Ajusta si es después de medianoche
                 const leftPercent = ((horaDecimal - 17) / 16) * 100;
+
+                // Calcular ancho según duración
+                const duracion = ev.duracion || 60;
+                const percentWidth = (duracion / 60) * (100 / 16);
+
                 div.style.left = leftPercent + '%';
+                div.style.width = percentWidth + '%';
                 div.style.top = ev.top + 'px';
                 div.innerHTML = `<h3>${ev.titulo}</h3><p>${ev.detalle}</p>`;
                 contenedor.appendChild(div);
             });
+
             actualizarLineaAhora();
         }
 
@@ -258,7 +268,7 @@
         }
 
 
-        mostrarDia('viernes');
+        mostrarDia('sabado');
         setInterval(actualizarLineaAhora, 60000);
     </script>
 </body>
