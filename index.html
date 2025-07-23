@@ -275,6 +275,133 @@
       color: #eee;
       margin-bottom: 0.5em;
     }
+
+    .bj-table {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.7em;
+      margin-bottom: .6em;
+    }
+
+    .bj-label {
+      font-size: 1.19em;
+      color: #a24aff;
+      margin-bottom: .17em;
+      letter-spacing: .7px;
+    }
+
+    .bj-cards {
+      display: flex;
+      gap: 15px;
+      margin: 0.2em 0 0.2em 0;
+    }
+
+    .bj-card {
+      width: 56px;
+      height: 74px;
+      background: linear-gradient(145deg, #140a1e 60%, #2a1140 100%);
+      border: 3px solid #a24aff;
+      border-radius: 13px;
+      color: #fff;
+      box-shadow: 0 0 16px #a24aff33;
+      font-size: 2.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      text-shadow: 0 0 4px #000, 0 0 14px #a24aff77;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+    }
+
+    .bj-card.red {
+      color: #ff73bb;
+    }
+
+    .bj-card.hidden {
+      background: repeating-linear-gradient(45deg,
+          #3d2761,
+          #3d2761 10px,
+          #2d1245 14px,
+          #2d1245 22px);
+      color: transparent;
+    }
+
+    .bj-score {
+      font-size: 1.11em;
+      color: #fff;
+      font-weight: bold;
+      margin-top: .13em;
+    }
+
+    .bj-lives {
+      font-size: 1.6em;
+      vertical-align: middle;
+      letter-spacing: 6px;
+    }
+
+    .bj-label-lives {
+      color: #a24aff;
+      font-size: 1.08em;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-right: 0.14em;
+    }
+
+    .bj-timer {
+      font-size: 1.12em;
+      color: #a24aff;
+    }
+
+    #bj-controls-v2 button {
+      background: #2a1140;
+      color: #a24aff;
+      border: 2.3px solid #a24aff;
+      border-radius: 11px;
+      padding: 0.72em 1.4em;
+      margin: 0 0.5em;
+      font-size: 1.13em;
+      font-family: 'Courier New', Courier, monospace;
+      cursor: pointer;
+      box-shadow: 0 0 13px #a24aff44;
+      transition: background 0.18s, color 0.18s, box-shadow 0.17s;
+    }
+
+    #bj-controls-v2 button:hover,
+    #bj-winbtn-v2 button:hover {
+      background: #a24aff;
+      color: #fff;
+      box-shadow: 0 0 22px #a24aff;
+    }
+
+    #bj-winbtn-v2 button {
+      background: #a24aff;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.22em;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 0.8em 2em;
+      box-shadow: 0 0 14px #a24aff99;
+      cursor: pointer;
+      transition: box-shadow 0.16s;
+    }
+
+    #bj-retrybtn-v2 {
+      display: none;
+      text-align: center;
+      width: 100%;
+    }
+
+    #bj-retrybtn-v2 button {
+      display: block;
+      margin: 0 auto 0.5em auto;
+    }
+
+    #bj-status-v2 {
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -295,16 +422,43 @@
     <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
   </a>
   <div id="mystery-popup-bg" class="mystery-popup-bg" style="display:none;">
-    <div class="mystery-popup-content">
-      <button class="mystery-popup-close" id="close-mystery-popup">&times;</button>
-      <h2>¿Misterio?</h2>
-      <div class="mystery-popup-inner">
-        <!-- Aquí puedes meter lo que quieras: pistas, reglas secretas, etc -->
-        <p>Pronto se revelará una sorpresa en Castasound...</p>
+    <div id="blackjack-game-v2" style="margin-bottom:0.5em;">
+      <div style="margin-bottom:1.4em; font-size:1.3em;">
+        <span class="bj-label-lives">Vidas:</span>
+        <span class="bj-lives" id="bj-lives"></span>
+        <span class="bj-timer" id="bj-timer" style="display:none; margin-left: 0.5em;"></span>
+      </div>
+      <div class="bj-table">
+        <div>
+          <div class="bj-label">Banca</div>
+          <div id="bj-dealer-cards-v2" class="bj-cards"></div>
+          <div id="bj-dealer-score-v2" class="bj-score"></div>
+        </div>
+        <div>
+          <div class="bj-label">Tú</div>
+          <div id="bj-player-cards-v2" class="bj-cards"></div>
+          <div id="bj-player-score-v2" class="bj-score"></div>
+        </div>
+      </div>
+      <div id="bj-status-v2" style="margin-top:1.1em;min-height:1.7em;font-size:1.15em;"></div>
+      <div id="bj-controls-v2" style="margin-top:1.1em;">
+        <button onclick="bjv2Hit()">Pedir carta</button>
+        <button onclick="bjv2Stand()">Plantarse</button>
+        <button onclick="bjv2Restart()">Nueva partida</button>
+      </div>
+      <div id="bj-winbtn-v2" style="margin-top:1.2em; display:none;">
+        <!-- <button onclick="window.location.href='TU_PREMIO.html'">¡Has ganado! Ver tu premio</button> -->
+        <button>¡Has ganado! Ver tu premio (en obras... :()</button>
+      </div>
+      <div id="bj-retrybtn-v2" style="margin-top:1.4em; display:none;">
+        <div style="color:#a24aff;margin-top:.5em;font-size:1em;margin-bottom: 10px;">Debes esperar 15 minutos para volver a jugar si
+          pierdes todas tus vidas.</div>
+        <button onclick="bjv2TryAgain()"
+          style="background:#2a1140;color:#a24aff;border:2px solid #a24aff;border-radius:10px;padding:0.7em 1.6em;font-size:1.1em;cursor:pointer;box-shadow:0 0 10px #a24aff99;">Reintentar</button>
+
       </div>
     </div>
   </div>
-
 </body>
 
 <script>
@@ -312,13 +466,158 @@
   document.getElementById('open-mystery-popup').onclick = function () {
     document.getElementById('mystery-popup-bg').style.display = 'flex';
   };
-  document.getElementById('close-mystery-popup').onclick = function () {
-    document.getElementById('mystery-popup-bg').style.display = 'none';
-  };
   // Opcional: cerrar popup haciendo clic fuera del contenido
   document.getElementById('mystery-popup-bg').onclick = function (e) {
     if (e.target === this) this.style.display = 'none';
   };
+
+  // BLACKJACK GAME
+  // BLACKJACK sencillo
+  const BJ_MAX_LIVES = 3, BJ_COOLDOWN = 15 * 60; // 15 minutos en segundos
+  const BJ_STORAGE = "castasound_blackjack_v2";
+  let bjv2Deck, bjv2Player, bjv2Dealer, bjv2Ended, bjv2Lives, bjv2NextTime;
+
+  function bjv2InitState() {
+    let state = { lives: BJ_MAX_LIVES, next: 0 };
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(BJ_STORAGE));
+      if (saved && typeof saved.lives === "number") state = saved;
+    } catch { }
+    bjv2Lives = state.lives;
+    bjv2NextTime = state.next;
+  }
+  function bjv2SaveState() {
+    sessionStorage.setItem(BJ_STORAGE, JSON.stringify({ lives: bjv2Lives, next: bjv2NextTime }));
+  }
+  function bjv2RenderLives() {
+    document.getElementById("bj-lives").innerHTML =
+      '<span style="font-size:1.05em;">' +
+      Array.from({ length: BJ_MAX_LIVES }, (_, i) => (i < bjv2Lives ? '❤️' : '🖤')).join(' ') +
+      "</span>";
+  }
+  function bjv2RenderTimer() {
+    const el = document.getElementById("bj-timer");
+    if (bjv2Lives > 0) { el.style.display = "none"; return; }
+    el.style.display = "inline";
+    const secs = Math.max(0, Math.floor(bjv2NextTime - Date.now() / 1000));
+    if (secs <= 0) { bjv2Lives = BJ_MAX_LIVES; bjv2SaveState(); bjv2RenderLives(); el.style.display = "none"; bjv2Start(); return; }
+    const m = Math.floor(secs / 60), s = secs % 60;
+    el.textContent = `Recarga en ${m}:${(s < 10 ? '0' : '') + s}`;
+    setTimeout(bjv2RenderTimer, 1000);
+  }
+  function bjv2CardHTML(c, hide) {
+    if (hide) return '<div class="bj-card hidden"></div>';
+    const red = (c[1] === '♥️' || c[1] === '♦️') ? "red" : "";
+    return `<div class="bj-card ${red}">${c[0]}<span style="font-size:0.7em;margin-left:2px;">${c[1]}</span></div>`;
+  }
+  function bjv2Show() {
+    document.getElementById('bj-player-cards-v2').innerHTML = bjv2Player.map(c => bjv2CardHTML(c, false)).join('');
+    document.getElementById('bj-dealer-cards-v2').innerHTML =
+      bjv2Dealer.map((c, i) => (bjv2Ended || i > 0) ? bjv2CardHTML(c, false) : bjv2CardHTML(c, true)).join('');
+    document.getElementById('bj-player-score-v2').textContent = bjv2Score(bjv2Player);
+    document.getElementById('bj-dealer-score-v2').textContent = bjv2Ended ? bjv2Score(bjv2Dealer) : '?';
+  }
+  function bjv2Status(msg) {
+    document.getElementById('bj-status-v2').textContent = msg;
+  }
+  function bjv2End(msg, win) {
+    bjv2Ended = true;
+    bjv2Show();
+    if (!win) {
+      bjv2Lives--;
+      bjv2SaveState();
+      bjv2RenderLives();
+      if (bjv2Lives === 0) {
+        document.getElementById('bj-controls-v2').style.display = 'none';
+        document.getElementById('bj-winbtn-v2').style.display = 'none';
+        document.getElementById('bj-retrybtn-v2').style.display = 'block';
+        bjv2NextTime = Math.floor(Date.now() / 1000) + BJ_COOLDOWN;
+        bjv2SaveState();
+        bjv2RenderTimer();
+      } else {
+        // Quedan vidas: puedes jugar otra
+        document.getElementById('bj-controls-v2').style.display = 'block';
+        document.getElementById('bj-winbtn-v2').style.display = 'none';
+        document.getElementById('bj-retrybtn-v2').style.display = 'none';
+      }
+    } else {
+      document.getElementById('bj-controls-v2').style.display = 'none';
+      document.getElementById('bj-winbtn-v2').style.display = 'block';
+      document.getElementById('bj-retrybtn-v2').style.display = 'none';
+    }
+    bjv2Status(msg);
+  }
+
+  function bjv2Start() {
+    bjv2InitState();
+    bjv2RenderLives();
+    document.getElementById('bj-retrybtn-v2').style.display = 'none';
+    if (bjv2Lives <= 0) { bjv2RenderTimer(); document.getElementById('bj-controls-v2').style.display = 'none'; return; }
+    bjv2Deck = bjv2NewDeck();
+    bjv2Player = [bjv2Deck.pop(), bjv2Deck.pop()];
+    bjv2Dealer = [bjv2Deck.pop(), bjv2Deck.pop()];
+    bjv2Ended = false;
+    document.getElementById('bj-controls-v2').style.display = 'block';
+    document.getElementById('bj-winbtn-v2').style.display = 'none';
+    bjv2Status("¡Juega tu mano de Blackjack!");
+    bjv2Show();
+    if (bjv2Score(bjv2Player) === 21) bjv2Stand();
+  }
+  function bjv2TryAgain() {
+    // Comprueba si el tiempo ya se ha cumplido
+    if (bjv2Lives <= 0) {
+      const now = Math.floor(Date.now() / 1000);
+      if (now >= bjv2NextTime) {
+        bjv2Lives = BJ_MAX_LIVES;
+        bjv2SaveState();
+        bjv2Start();
+      }
+    }
+  }
+  function bjv2Hit() {
+    if (bjv2Ended || bjv2Lives <= 0) return;
+    bjv2Player.push(bjv2Deck.pop());
+    bjv2Show();
+    let score = bjv2Score(bjv2Player);
+    if (score > 21) bjv2End("¡Te pasaste! Pierdes 😵", false);
+    else if (score === 21) bjv2Stand();
+  }
+  function bjv2Stand() {
+    if (bjv2Ended || bjv2Lives <= 0) return;
+    while (bjv2Score(bjv2Dealer) < 17) bjv2Dealer.push(bjv2Deck.pop());
+    let ps = bjv2Score(bjv2Player), ds = bjv2Score(bjv2Dealer);
+    if (ds > 21) bjv2End("¡La banca se pasa! ¡Ganas! 🥳", true);
+    else if (ps > ds) bjv2End("¡Ganas! 🥳", true);
+    else if (ps === ds) bjv2End("Empate, gana la banca. 😑", false); // ventaja casa
+    else bjv2End("Pierdes, la banca gana. 😭", false);
+  }
+  function bjv2Restart() {
+    if (bjv2Lives > 0) bjv2Start();
+  }
+  function bjv2NewDeck() {
+    const vals = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'];
+    const palos = ['♠️', '♥️', '♦️', '♣️'];
+    let d = [];
+    for (let v of vals) for (let p of palos) d.push([v, p]);
+    for (let i = d.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [d[i], d[j]] = [d[j], d[i]];
+    }
+    return d;
+  }
+  function bjv2CardValue(c) {
+    if (['J', 'Q', 'K'].includes(c[0])) return 10;
+    if (c[0] === 'A') return 11;
+    return c[0];
+  }
+  function bjv2Score(hand) {
+    let s = hand.reduce((acc, c) => acc + bjv2CardValue(c), 0);
+    let aces = hand.filter(c => c[0] === 'A').length;
+    while (s > 21 && aces > 0) { s -= 10; aces--; }
+    return s;
+  }
+  bjv2Start();
+
 
   // COUNTDOWN
   // FECHA DEL EVENTO:
