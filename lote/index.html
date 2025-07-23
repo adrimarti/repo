@@ -10,9 +10,14 @@
       margin: 0;
       padding: 0;
       font-family: 'Courier New', Courier, monospace;
-      background: #0a0f1c;
+      background: radial-gradient(circle at 50% 30%, #1a0f2e, #000);
       color: white;
       min-height: 100vh;
+      animation: fadein 2s ease-in-out;
+    }
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     h1 {
       text-align: center;
@@ -28,7 +33,7 @@
       margin-bottom: 1rem;
     }
     .filter-buttons button {
-      background: #1ed760;
+      background: #a24aff;
       border: none;
       color: black;
       padding: 0.5rem 1.2rem;
@@ -38,7 +43,7 @@
       transition: background 0.2s;
     }
     .filter-buttons button:hover {
-      background: #2dfb76;
+      background: #c877ff;
     }
     .lotes-container {
       display: flex;
@@ -50,24 +55,24 @@
     }
     .lote {
       display: flex;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
       align-items: center;
-      box-shadow: 0 0 12px rgba(255,255,255,0.05);
+      box-shadow: 0 0 12px rgba(162, 74, 255, 0.2);
       transition: transform 0.2s, box-shadow 0.3s;
     }
     .lote:hover {
       transform: scale(1.02);
-      box-shadow: 0 0 20px #1ed760;
+      box-shadow: 0 0 20px #a24aff;
     }
     .lote img {
       width: 100px;
       height: 100px;
       object-fit: cover;
       border-radius: 12px 0 0 12px;
-      border-right: 2px solid #1ed760;
+      border-right: 2px solid #a24aff;
     }
     .info {
       padding: 1rem;
@@ -75,11 +80,11 @@
     }
     .info h2 {
       margin: 0 0 0.5rem;
-      color: #1ed760;
+      color: #a24aff;
       font-size: 1.3rem;
     }
     .info p {
-      color: #bbb;
+      color: #ccc;
       font-size: 0.95rem;
     }
     .like-btn {
@@ -87,11 +92,11 @@
       font-size: 1.5rem;
       cursor: pointer;
       transition: transform 0.2s;
-      color: #1ed760;
+      color: #a24aff;
     }
     .like-btn.liked i {
-      color: #1ed760;
-      text-shadow: 0 0 6px #1ed760;
+      color: #a24aff;
+      text-shadow: 0 0 6px #a24aff;
     }
     .like-btn i {
       pointer-events: none;
@@ -111,7 +116,7 @@
       z-index: 1000;
     }
     .popup-content {
-      background: #121426;
+      background: #1d1035;
       padding: 2rem;
       max-width: 500px;
       width: 100%;
@@ -119,15 +124,16 @@
       box-shadow: 0 0 25px #a24aff;
       text-align: center;
       box-sizing: border-box;
+      animation: fadein 1s ease-in-out;
     }
     .popup-content img {
       width: 100%;
       border-radius: 10px;
       margin-bottom: 1rem;
-      border: 2px solid #1ed760;
+      border: 2px solid #a24aff;
     }
     .popup-content h2 {
-      color: #1ed760;
+      color: #a24aff;
       margin-bottom: 0.5rem;
     }
     .popup-content p {
@@ -142,7 +148,7 @@
       margin-top: 1rem;
     }
     .popup-buttons button {
-      background: #1ed760;
+      background: #a24aff;
       color: black;
       border: none;
       padding: 0.5rem 1rem;
@@ -158,6 +164,7 @@
     <button onclick="loadLotes('all')">Todos</button>
     <button onclick="loadLotes('liked')">❤️ Favoritos</button>
   </div>
+
   <div class="lotes-container" id="lotesContainer"></div>
 
   <div class="popup" id="popup">
@@ -201,37 +208,33 @@
             <h2>${lote.title}</h2>
             <p>${lote.desc}</p>
           </div>
-          <div class="like-btn" onclick="likeLote(event, ${lote.id})">
-            <i class="fa-regular fa-heart"></i>
-          </div>
+          <div class="like-btn"><i class="fa-regular fa-heart"></i></div>
         `;
+        const likeBtn = div.querySelector(".like-btn");
+        if (sessionStorage.getItem(`like_${lote.id}`)) {
+          likeBtn.classList.add("liked");
+          likeBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
+        }
+        likeBtn.onclick = (event) => {
+          event.stopPropagation();
+          const key = `like_${lote.id}`;
+          if (sessionStorage.getItem(key)) {
+            sessionStorage.removeItem(key);
+            likeBtn.classList.remove("liked");
+            likeBtn.innerHTML = '<i class="fa-regular fa-heart"></i>';
+          } else {
+            sessionStorage.setItem(key, "true");
+            likeBtn.classList.add("liked");
+            likeBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
+          }
+        };
         div.onclick = (e) => {
           if (!e.target.closest('.like-btn')) {
             showPopup(lote.title, lote.desc, lote.img, lote.id);
           }
         };
         container.appendChild(div);
-        const likeBtn = div.querySelector('.like-btn');
-        if (sessionStorage.getItem(`like_${lote.id}`)) {
-          likeBtn.classList.add('liked');
-          likeBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
-        }
       });
-    }
-
-    function likeLote(event, id) {
-      event.stopPropagation();
-      const key = `like_${id}`;
-      const el = event.currentTarget;
-      if (sessionStorage.getItem(key)) {
-        sessionStorage.removeItem(key);
-        el.classList.remove("liked");
-        el.innerHTML = '<i class="fa-regular fa-heart"></i>';
-      } else {
-        sessionStorage.setItem(key, "true");
-        el.classList.add("liked");
-        el.innerHTML = '<i class="fa-solid fa-heart"></i>';
-      }
     }
 
     let currentLoteId = null;
