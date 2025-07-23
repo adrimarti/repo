@@ -10,82 +10,184 @@
       font-family: 'Courier New', Courier, monospace;
       background: black;
       color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       min-height: 100vh;
-      background: linear-gradient(to bottom, #000000, #0a0a0a);
     }h1 {
-  margin-top: 2rem;
-  font-size: 3rem;
+  text-align: center;
+  padding: 2rem;
+  font-size: 2.5rem;
   text-shadow: 0 0 10px #0ff, 0 0 20px #f0f;
 }
 
 .lotes-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  padding: 2rem;
-  width: 100%;
-  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 800px;
+  margin: auto;
 }
 
 .lote {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  display: flex;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
   transition: transform 0.2s;
 }
 
 .lote:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   box-shadow: 0 0 18px #1ed760;
 }
 
 .lote img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px 0 0 10px;
 }
 
-.lote h2 {
-  font-size: 1.3rem;
-  margin: 0.5rem 0;
+.info {
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.info h2 {
+  margin: 0 0 0.5rem;
+  color: #1ed760;
+  font-size: 1.2rem;
+}
+
+.like-btn {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.like-btn.liked {
+  color: #1ed760;
+  transform: scale(1.3);
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #111;
+  padding: 2rem;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #0ff;
+}
+
+.popup-content h2 {
   color: #1ed760;
 }
 
-.lote p {
-  font-size: 0.95rem;
+.popup-content p {
   color: #ccc;
 }
 
-@media screen and (max-width: 600px) {
-  h1 { font-size: 2rem; }
+.close-btn {
+  margin-top: 1rem;
+  background: #1ed760;
+  color: black;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 6px;
 }
 
   </style>
 </head>
 <body>
   <h1>Lotes en Subasta 🎁</h1>
-  <div class="lotes-container">
-    <div class="lote">
-      <img src="https://via.placeholder.com/300x180?text=Lote+1" alt="Lote 1" />
-      <h2>Lote 1: Caja Misteriosa</h2>
-      <p>Contenido secreto que solo se revelará al ganador. ¿Te atreves?</p>
+  <div class="lotes-container" id="lotesContainer"></div>  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h2 id="popupTitle"></h2>
+      <p id="popupDescription"></p>
+      <button class="close-btn" onclick="closePopup()">Cerrar</button>
     </div>
-    <div class="lote">
-      <img src="https://via.placeholder.com/300x180?text=Lote+2" alt="Lote 2" />
-      <h2>Lote 2: Experiencia VIP</h2>
-      <p>Pase directo para el primer brindis de la noche + regalo sorpresa.</p>
-    </div>
-    <div class="lote">
-      <img src="https://via.placeholder.com/300x180?text=Lote+3" alt="Lote 3" />
-      <h2>Lote 3: Casta-Cóctel</h2>
-      <p>Un cóctel único creado solo para Castasound. Ingredientes exclusivos.</p>
-    </div>
-    <!-- Puedes duplicar más bloques "lote" según la cantidad de premios -->
-  </div>
-</body>
+  </div>  <script>
+    const lotes = [
+      { id: 1, title: "Caja Misteriosa", desc: "Contenido secreto que solo se revelará al ganador. ¿Te atreves?", img: "https://via.placeholder.com/100x100?text=1" },
+      { id: 2, title: "Experiencia VIP", desc: "Brindis privado y acceso a zona exclusiva.", img: "https://via.placeholder.com/100x100?text=2" },
+      { id: 3, title: "Casta-Cóctel", desc: "Cóctel único solo para Castasound.", img: "https://via.placeholder.com/100x100?text=3" },
+      { id: 4, title: "Foto Polaroid", desc: "Foto firmada del evento, solo 1 disponible.", img: "https://via.placeholder.com/100x100?text=4" },
+      { id: 5, title: "Vale Beso Robado", desc: "Canjeable con quien el azar decida...", img: "https://via.placeholder.com/100x100?text=5" },
+      { id: 6, title: "Disfraz Improvisado", desc: "Incluye atrezzo y cámara dedicada.", img: "https://via.placeholder.com/100x100?text=6" },
+      { id: 7, title: "Power Nap VIP", desc: "Minisiesta en espacio secreto con sonido ambiente.", img: "https://via.placeholder.com/100x100?text=7" },
+      { id: 8, title: "Meme del Evento", desc: "Meme personalizado con tu cara en el momento más legendario.", img: "https://via.placeholder.com/100x100?text=8" },
+      { id: 9, title: "Copazo + DJ Set", desc: "Tu propio track en la playlist durante el brindis.", img: "https://via.placeholder.com/100x100?text=9" },
+      { id: 10, title: "Acceso al After", desc: "Llave dorada al rincón más misterioso del castillo.", img: "https://via.placeholder.com/100x100?text=10" }
+    ];
+
+    const container = document.getElementById("lotesContainer");
+    const popup = document.getElementById("popup");
+    const popupTitle = document.getElementById("popupTitle");
+    const popupDescription = document.getElementById("popupDescription");
+
+    function loadLotes() {
+      lotes.forEach(lote => {
+        const div = document.createElement("div");
+        div.className = "lote";
+        div.innerHTML = `
+          <img src="${lote.img}" alt="${lote.title}" />
+          <div class="info">
+            <h2>${lote.title}</h2>
+            <p>${lote.desc}</p>
+          </div>
+          <div class="like-btn" onclick="likeLote(event, ${lote.id})">❤️</div>
+        `;
+        div.onclick = (e) => {
+          if (!e.target.classList.contains("like-btn")) {
+            showPopup(lote.title, lote.desc);
+          }
+        }
+        container.appendChild(div);
+        if (sessionStorage.getItem(`like_${lote.id}`)) {
+          div.querySelector('.like-btn').classList.add('liked');
+        }
+      });
+    }
+
+    function likeLote(event, id) {
+      event.stopPropagation();
+      const key = `like_${id}`;
+      const el = event.target;
+      if (sessionStorage.getItem(key)) {
+        sessionStorage.removeItem(key);
+        el.classList.remove("liked");
+      } else {
+        sessionStorage.setItem(key, "true");
+        el.classList.add("liked");
+      }
+    }
+
+    function showPopup(title, desc) {
+      popupTitle.textContent = title;
+      popupDescription.textContent = desc;
+      popup.style.display = "flex";
+    }
+
+    function closePopup() {
+      popup.style.display = "none";
+    }
+
+    window.onload = loadLotes;
+  </script></body>
 </html>
