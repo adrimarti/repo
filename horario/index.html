@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timeline Castasound</title>
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: linear-gradient(to bottom, #0b0212 0%, #181028 100%);
+            color: #eee;
+            padding: 0;
+            overflow-x: hidden;
+            animation: fadein 2s ease-in-out;
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px #a24aff;
+            margin-bottom: 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .tabs button {
+            background: none;
+            border: 1px solid #a24aff;
+            color: #a24aff;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        .tabs button.active {
+            background: #a24aff;
+            color: white;
+        }
+
+        .timeline-wrapper {
+            padding-left: 60px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 2rem 0 0 0;
+            position: relative;
+            scrollbar-color: #a24aff #1a0f2e;
+            scrollbar-width: thin;
+            background: transparent;
+        }
+
+        .timeline-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .timeline-wrapper::-webkit-scrollbar-thumb {
+            background: #a24aff;
+            border-radius: 4px;
+        }
+
+        .timeline-wrapper::-webkit-scrollbar-track {
+            background: #1a0f2e;
+        }
+
+        .time-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: #aaa;
+            position: sticky;
+            top: 0;
+            padding: 0.5rem 1rem;
+            z-index: 5;
+            background: linear-gradient(to bottom, rgba(14, 5, 26, 0.95), rgba(14, 5, 26, 0));
+            min-width: 3840px;
+        }
+
+        .time-labels span {
+            text-shadow: 0 0 4px #000;
+            flex: 1;
+            text-align: center;
+        }
+
+        .timeline {
+            position: relative;
+            height: 700px;
+            min-width: 3900px;
+            border-top: 2px solid #a24aff;
+            background: transparent;
+        }
+
+        .event {
+            position: absolute;
+            background: rgba(162, 74, 255, 0.1);
+            border: 1px solid #a24aff;
+            border-radius: 16px;
+            padding: 2rem;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0 0 15px #a24aff;
+            width: 220px;
+            backdrop-filter: blur(4px);
+            transition: transform 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .event:hover {
+            transform: scale(1.05);
+        }
+
+        .event.now {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #ffffff;
+            box-shadow: 0 0 20px #ffffff;
+        }
+
+        .event h3 {
+            margin: 0;
+            color: #a24aff;
+            font-size: 1.4rem;
+            text-shadow: 0 0 5px #a24aff;
+        }
+
+        .event p {
+            margin: 0.5rem 0 0 0;
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .now-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: white;
+            box-shadow: 0 0 10px white;
+            z-index: 1;
+        }
+
+        .now-time {
+            position: absolute;
+            top: -2rem;
+            font-size: 0.8rem;
+            color: #ffffffcc;
+            text-shadow: 0 0 5px #a24aff;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🕘 Horario</h1>
+    <div class="tabs">
+        <button onclick="mostrarDia('viernes')" class="active">Viernes</button>
+        <button onclick="mostrarDia('sabado')">Sábado</button>
+    </div>
+    <div class="timeline-wrapper">
+        <div class="time-padding"></div>
+        <div class="time-labels">
+            <span>17:00</span><span>18:00</span><span>19:00</span><span>20:00</span><span>21:00</span><span>22:00</span><span>23:00</span><span>00:00</span><span>01:00</span><span>02:00</span><span>03:00</span><span>04:00</span><span>05:00</span><span>06:00</span><span>07:00</span><span>08:00</span><span>09:00</span>
+        </div>
+        <div class="timeline-padding"></div>
+        <div class="timeline" id="timeline"></div>
+        <div class="now-line" id="now-line"></div>
+        <div class="now-time" id="now-time"></div>
+    </div>
+    <script>
+        const eventos = {
+            viernes: [
+                { hora: '17:10', top: 60, titulo: 'Llegada 🎒', detalle: 'Acreditación y bienvenida' },
+                { hora: '18:00', top: 160, titulo: 'Check-in tiendas ⛺', detalle: 'Montaje libre' },
+                { hora: '19:00', top: 260, titulo: 'Aperitivos 🥨', detalle: 'Picoteo general' },
+                { hora: '20:00', top: 60, titulo: 'Apertura ✨', detalle: 'Inauguración oficial' },
+                { hora: '21:00', top: 160, titulo: 'Photocall 📸', detalle: 'Fotos y disfraces' },
+                { hora: '22:00', top: 260, titulo: 'Blackjack ♠️', detalle: 'Mesa abierta' },
+                { hora: '23:00', top: 60, titulo: 'DJ Set 🎧', detalle: 'Luces y sonido' },
+                { hora: '00:00', top: 160, titulo: 'Barra libre 🍹', detalle: 'Cocktails y más' },
+                { hora: '01:00', top: 260, titulo: 'Ruleta 🎯', detalle: 'Juegos en mesa' },
+                { hora: '02:00', top: 60, titulo: 'Piano en vivo 🎹', detalle: 'Ambiente chill' },
+                { hora: '03:00', top: 160, titulo: 'Bingo 💸', detalle: 'Premios sorpresa' },
+                { hora: '04:00', top: 260, titulo: 'Afterhour 🌅', detalle: 'Vuelta al campamento' }
+            ],
+            sabado: [
+                { hora: '17:10', top: 60, titulo: 'Desayuno tardío 🥐', detalle: 'Café y bollería' },
+                { hora: '18:00', top: 160, titulo: 'Yoga 🧘', detalle: 'Sesión de estiramientos' },
+                { hora: '19:00', top: 260, titulo: 'Mercadillo 🛍️', detalle: 'Trueque entre asistentes' },
+                { hora: '20:00', top: 60, titulo: 'Concurso talentos 🎭', detalle: 'Show en vivo' },
+                { hora: '21:00', top: 160, titulo: 'Póker 🃏', detalle: 'Partidas intensas' },
+                { hora: '22:00', top: 260, titulo: 'Cena 🍛', detalle: 'Buffet libre' },
+                { hora: '23:00', top: 60, titulo: 'DJ Set 2 🎶', detalle: 'Electrónica y luces' },
+                { hora: '00:00', top: 160, titulo: 'Subasta final 🏆', detalle: 'Premios especiales' },
+                { hora: '01:00', top: 260, titulo: 'Fogata 🔥', detalle: 'Historias y música' },
+                { hora: '02:00', top: 60, titulo: 'Cierre bar 🎬', detalle: 'Últimos tragos' },
+                { hora: '03:00', top: 160, titulo: 'Descanso 😴', detalle: 'Chillout y relax' },
+                { hora: '04:00', top: 260, titulo: 'Despedida 💜', detalle: 'Últimos abrazos' }
+            ]
+        };
+
+        let diaActual = 'viernes';
+
+        function mostrarDia(dia) {
+            diaActual = dia;
+            document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tabs button:nth-child(${dia === 'viernes' ? 1 : 2})`).classList.add('active');
+            const contenedor = document.getElementById('timeline');
+            contenedor.innerHTML = '';
+            eventos[dia].forEach(ev => {
+                const div = document.createElement('div');
+                div.className = 'event';
+                const [h, m] = ev.hora.split(':').map(Number);
+                let horaDecimal = h + m / 60;
+                if (horaDecimal < 17) horaDecimal += 24;
+                const leftPercent = ((horaDecimal - 17) / 16) * 100;
+                div.style.left = leftPercent + '%';
+                div.style.top = ev.top + 'px';
+                div.innerHTML = `<h3>${ev.titulo}</h3><p>${ev.detalle}</p>`;
+                contenedor.appendChild(div);
+            });
+            actualizarLineaAhora();
+        }
+
+        function actualizarLineaAhora() {
+            const ahora = new Date();
+            const horasInicio = 17;
+            const horasTotales = 16;
+            let hora = ahora.getHours() + ahora.getMinutes() / 60;
+            if (hora < horasInicio) hora += 24;
+
+            const timeline = document.getElementById('timeline');
+            const timelineWidth = timeline.offsetWidth;
+            const leftPixels = ((hora - horasInicio) / horasTotales) * timelineWidth;
+            document.getElementById('now-line').style.left = leftPixels + 'px';
+            const timeLabel = document.getElementById('now-time');
+            const horas = String(ahora.getHours()).padStart(2, '0');
+            const minutos = String(ahora.getMinutes()).padStart(2, '0');
+            timeLabel.textContent = `${horas}:${minutos}`;
+            timeLabel.style.left = leftPixels + 'px';
+        }
+
+
+        mostrarDia('viernes');
+        setInterval(actualizarLineaAhora, 60000);
+    </script>
+</body>
+
+</html>
