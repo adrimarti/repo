@@ -358,12 +358,13 @@
             <span class="close" onclick="cerrarRegistro()">&times;</span>
             <h2 style="color:#f0f;">Registro</h2>
             <form id="registroForm" onsubmit="enviarRegistro(event)">
-                <input type="text" id="regNombre" placeholder="Nombre de jugador" required maxlength="30" autocomplete="off"><br>
-                <input type="text" id="regObjeto" placeholder="¿Qué objeto llevarías?" required maxlength="30" autocomplete="off"><br>
+                <input type="text" id="regUsuario" placeholder="Usuario" required maxlength="30" autocomplete="off"><br>
                 <div class="password-row">
                     <input type="text" id="regPass" placeholder="Elige una contraseña" required maxlength="20" autocomplete="off">
                     <button type="button" id="autoBtn" onclick="autogenerarPass()">Autogen</button>
                 </div>
+                <input type="text" id="regNombre" placeholder="Nombre completo de jugador" required maxlength="30" autocomplete="off"><br>
+                <input type="text" id="regObjeto" placeholder="¿Qué objeto llevarías?" required maxlength="30" autocomplete="off"><br>
                 <button type="submit" id="btnRegistro" style="margin-top: 10px;">Solicitar registro</button>
             </form>
 
@@ -466,11 +467,12 @@
 
             const nombre = document.getElementById('regNombre').value.trim();
             const objeto = document.getElementById('regObjeto').value.trim();
+            const usuario = document.getElementById('regUsuario').value.trim();
             const password = document.getElementById('regPass').value.trim();
             const btn = document.getElementById('btnRegistro');
 
             // Validación en frontend (por si acaso)
-            if (!nombre || !objeto || !password) {
+            if (!nombre || !objeto || !password || !usuario) {
                 document.getElementById('registroMsg').innerText = "Todos los campos son obligatorios.";
                 return;
             }
@@ -481,7 +483,7 @@
             fetch('https://formspree.io/f/mzzvenjg', {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' },
-                body: new URLSearchParams({ nombre, objeto, password })
+                body: new URLSearchParams({ nombre, objeto, usuario, password })
             })
                 .then(response => {
                     if (response.ok) {
