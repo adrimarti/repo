@@ -7,34 +7,73 @@
     <title>Castasound: Misión Secreta</title>
     <style>
         body {
-            background: #0c0914;
+            background: #000;
+            /* Fondo negro total, igual que el style principal */
             color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Courier New', Courier, monospace;
+            /* Igualamos la fuente */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden;
+            /* Para imitar el efecto */
         }
 
+        /* FONDO BLUR Y EFECTO ZOOM */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1604023517321-58b69e1942f8?auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.4) blur(2px);
+            z-index: -2;
+            animation: zoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes zoom {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        /* CAJAS PRINCIPALES: login, mission */
         .login-box,
         .mission-box {
-            background: #160d22;
-            border-radius: 12px;
-            box-shadow: 0 0 12px #f0f2, 0 0 2px #202 inset;
-            padding: 32px 20px 20px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 1rem;
+            box-shadow: 0 0 30px rgba(162, 74, 255, 0.22), 0 0 6px #1a0a2e99;
+            padding: 2.2rem 2.3rem 1.7rem 2.3rem;
             max-width: 370px;
-            margin: 12px;
+            margin: 14px;
             text-align: center;
             position: relative;
+            border: 2.5px solid #a24aff;
+            /* Transición suave en hover */
+            transition: box-shadow 0.21s, border 0.17s;
+            backdrop-filter: blur(2px);
+        }
+
+        .login-box:hover,
+        .mission-box:hover {
+            box-shadow: 0 0 48px 14px #a24affcc;
+            border-color: #fff;
         }
 
         .login-box h2 {
-            color: #f0f;
+            color: #a24aff;
             margin-bottom: 22px;
             font-weight: 700;
             letter-spacing: 1.5px;
-            text-shadow: 0 0 8px #f0f4, 0 0 1px #fff;
+            text-shadow: 0 0 12px #a24aff, 0 0 22px #0ff;
             font-family: inherit;
         }
 
@@ -42,66 +81,72 @@
             width: 89%;
             padding: 11px;
             margin-bottom: 16px;
-            border-radius: 5px;
-            border: 1.5px solid #f0f8;
-            background: #120921;
-            color: #f0f;
-            font-size: 15px;
+            border-radius: 8px;
+            border: 2px solid #a24aff;
+            background: #1e0838;
+            color: #fff;
+            font-size: 1.1rem;
             outline: none;
-            transition: border .2s;
+            box-shadow: 0 0 8px #a24aff44;
+            font-family: 'Courier New', Courier, monospace;
+            transition: border .22s, box-shadow .16s;
         }
 
         input:focus {
-            border: 1.5px solid #fff;
+            border: 2px solid #fff;
+            box-shadow: 0 0 16px #a24aff88;
         }
 
         button {
-            padding: 10px 0;
+            padding: 12px 0;
             width: 100%;
-            border-radius: 5px;
-            border: 1.5px solid #f0f7;
+            border-radius: 10px;
+            border: 2px solid #a24aff;
             background: transparent;
-            color: #f0f;
-            font-size: 16px;
+            color: #a24aff;
+            font-size: 1.13em;
             margin-top: 8px;
             margin-bottom: 4px;
             cursor: pointer;
-            transition: background .2s, color .2s;
+            transition: background .2s, color .2s, box-shadow .17s, border .19s;
             font-family: inherit;
-            box-shadow: none;
+            box-shadow: 0 0 13px #a24aff44;
+            font-family: 'Courier New', Courier, monospace;
         }
 
         button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             background: #18102a !important;
-            /* más oscuro, opcional */
             color: #aaa !important;
-            border-color: #f0f2;
+            border-color: #a24aff44;
         }
 
-
         button:hover {
-            background: #2b183c;
+            background: #a24aff;
             color: #fff;
+            box-shadow: 0 0 22px #a24aff;
+            border-color: #fff;
         }
 
         .link-btn {
             background: none;
             border: none;
-            color: #f0f;
+            color: #a24aff;
             padding: 0;
-            font-size: 15px;
+            font-size: 1em;
             cursor: pointer;
             text-decoration: underline;
             margin-top: 10px;
             margin-bottom: 0;
-            transition: color .2s;
+            transition: color .18s;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 5px #a24affbb;
         }
 
         .link-btn:hover {
             color: #fff;
-            text-decoration: underline;
+            text-shadow: 0 0 8px #a24aff99;
         }
 
         .hidden {
@@ -109,14 +154,15 @@
         }
 
         #targetName {
-            font-size: 1.25em;
+            font-size: 1.3em;
             color: #fff;
             margin-top: 16px;
-            letter-spacing: 0.7px;
-            text-shadow: 0 0 5px #f0f2;
+            letter-spacing: 1px;
+            text-shadow: 0 0 7px #a24aff66, 0 0 14px #000;
+            font-family: 'Courier New', Courier, monospace;
         }
 
-        /* Modal minimalista */
+        /* MODAL ADAPTADO */
         .modal {
             position: fixed;
             z-index: 99;
@@ -124,10 +170,11 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(16, 2, 31, 0.92);
+            background: rgba(21, 6, 37, 0.97);
             display: flex;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(3px);
         }
 
         .modal.hidden {
@@ -135,80 +182,114 @@
         }
 
         .modal-content {
-            background: #190f23;
-            border-radius: 10px;
-            box-shadow: 0 0 16px #f0f4;
-            padding: 28px 20px 18px 20px;
+            background: rgba(30, 8, 56, 0.96);
+            border-radius: 20px;
+            box-shadow: 0 0 36px 7px #a24aff77, 0 0 120px 30px #1a072e22;
+            color: #fff;
+            padding: 2.2rem 2rem 1.6rem 2rem;
             max-width: 310px;
             width: 92vw;
             text-align: center;
             position: relative;
+            border: 2.5px solid #a24aff;
+            font-family: 'Courier New', Courier, monospace;
+            animation: popup-zoom 0.5s cubic-bezier(.43, 1.7, .36, 1) both;
+        }
+
+        @keyframes popup-zoom {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .close {
             position: absolute;
             right: 15px;
             top: 10px;
-            font-size: 20px;
-            color: #f0f;
+            font-size: 2rem;
+            color: #a24aff;
             cursor: pointer;
             font-weight: bold;
+            filter: drop-shadow(0 0 8px #a24affbb);
+            transition: color 0.14s;
+        }
+
+        .close:hover {
+            color: #fff;
+            background: none;
         }
 
         #registroMsg {
-            color: #f0f;
-            font-size: 14px;
-            margin-top: 14px;
-            min-height: 18px;
+            color: #a24aff;
+            font-size: 1.02em;
+            margin-top: 1.2em;
+            min-height: 20px;
+            text-shadow: 0 0 4px #a24aff99;
         }
 
         .password-row {
             display: flex;
             align-items: stretch;
-            /* Importante: iguala alturas */
             margin-bottom: 14px;
             width: 100%;
         }
 
         .password-row input {
             flex: 1 1 auto;
-            border-radius: 5px 0 0 5px;
-            border: 1.5px solid #f0f8;
+            border-radius: 8px 0 0 8px;
+            border: 2px solid #a24aff;
             border-right: none;
-            background: #120921;
-            color: #f0f;
-            font-size: 15px;
+            background: #1e0838;
+            color: #fff;
+            font-size: 1.1rem;
             padding: 11px 12px;
             box-sizing: border-box;
             outline: none;
             margin-bottom: 0;
             min-width: 0;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: 0 0 7px #a24aff33;
+        }
+
+        .password-row input:focus {
+            border: 2px solid #fff;
+            box-shadow: 0 0 14px #a24aff77;
         }
 
         .password-row button {
-            border-radius: 0 5px 5px 0;
-            border: 1.5px solid #f0f8;
+            border-radius: 0 8px 8px 0;
+            border: 2px solid #a24aff;
             border-left: none;
-            background: #18102a;
-            color: #f0f;
-            font-size: 15px;
+            background: #2a064a;
+            color: #a24aff;
+            font-size: 1.1em;
             padding: 0 18px;
-            min-width: 82px;
+            min-width: 84px;
             cursor: pointer;
-            transition: background .15s, color .15s, opacity .2s;
+            transition: background .14s, color .16s, opacity .2s;
             height: auto;
             margin: 0;
             box-sizing: border-box;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: 0 0 8px #a24aff33;
         }
 
         .password-row button:hover {
-            background: #2b183c;
+            background: #a24aff;
             color: #fff;
+            box-shadow: 0 0 18px #a24aff;
         }
     </style>
+
 </head>
 
 <body>
