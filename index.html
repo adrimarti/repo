@@ -645,8 +645,8 @@
     const segundos = diff % 60;
     let str = "";
     if (dias > 0) str += `${dias}d `;
-    if (horas > 0 || dias > 0) str += `${horas}h `;
-    str += `${minutos}m ${segundos}s`;
+    if (horas > 0 || dias > 0) str += `${horas}h`;
+    str += `${minutos}m${segundos}s`;
     document.getElementById("castasound-countdown").textContent = str;
   }
   actualizarCountdown();
