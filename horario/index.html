@@ -259,6 +259,7 @@
         let diaActual = 'viernes';
 
         function mostrarDia(dia) {
+            const PADDING_LEFT = 60; // igual al de .timeline-wrapper
             diaActual = dia;
             document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.tabs button:nth-child(${dia === 'viernes' ? 1 : 2})`).classList.add('active');
@@ -268,18 +269,22 @@
                 const div = document.createElement('div');
                 div.className = 'event';
 
-                // Calcular left
+                // Cambia esto en mostrarDia()
+                const timelineWidth = 3900; // ¡Siempre igual a tu min-width!
+
+                // Al crear cada evento:
                 const [h, m] = ev.hora.split(':').map(Number);
                 let horaDecimal = h + m / 60;
-                if (horaDecimal < 17) horaDecimal += 24; // Ajusta si es después de medianoche
-                const leftPercent = ((horaDecimal - 17) / 16) * 100;
+                if (horaDecimal < 17) horaDecimal += 24; // Ajuste después de medianoche
 
-                // Calcular ancho según duración
+                const leftPx = ((horaDecimal - 17) / 16) * timelineWidth;
+
+                // Duración en px
                 const duracion = ev.duracion || 60;
-                const percentWidth = (duracion / 60) * (100 / 16);
+                const widthPx = (duracion / 60) * (timelineWidth / 16);
 
-                div.style.left = leftPercent + '%';
-                div.style.width = percentWidth + '%';
+                div.style.left = (leftPx + PADDING_LEFT) + 'px';
+                div.style.width = widthPx + 'px';
                 div.style.top = ev.top + 'px';
                 div.innerHTML = `<h3>${ev.titulo}</h3><p>${ev.detalle}</p>`;
                 contenedor.appendChild(div);
@@ -289,21 +294,25 @@
         }
 
         function actualizarLineaAhora() {
-            const ahora = new Date();
+            const PADDING_LEFT = 60; // igual al de .timeline-wrapper
+            const ahora = new Date("2023-10-20T20:00:00"); // fija para testing
             const horasInicio = 17;
             const horasTotales = 16;
             let hora = ahora.getHours() + ahora.getMinutes() / 60;
             if (hora < horasInicio) hora += 24;
+            if (hora > 9 && hora < horasInicio) hora = horasInicio;
 
-            const timeline = document.getElementById('timeline');
-            const timelineWidth = timeline.offsetWidth;
-            const leftPixels = ((hora - horasInicio) / horasTotales) * timelineWidth;
-            document.getElementById('now-line').style.left = leftPixels + 'px';
+            const timelineWidth = 3900;
+            const leftPx = ((hora - horasInicio) / horasTotales) * timelineWidth;
+
+            document.getElementById('now-line').style.left = (leftPx + PADDING_LEFT) + 'px';
+
             const timeLabel = document.getElementById('now-time');
             const horas = String(ahora.getHours()).padStart(2, '0');
             const minutos = String(ahora.getMinutes()).padStart(2, '0');
             timeLabel.textContent = `${horas}:${minutos}`;
-            timeLabel.style.left = leftPixels + 'px';
+
+            document.getElementById('now-time').style.left = (leftPx + PADDING_LEFT) + 'px';
         }
 
         mostrarDia('viernes');
