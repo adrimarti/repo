@@ -158,15 +158,18 @@
       width: 64px;
       height: 64px;
       border-radius: 50%;
-      background: rgba(20, 4, 38, 0.96);
+      background: transparent;
+      /* Elimina el fondo del botón */
       border: 2px solid #a24aff;
       box-shadow: 0 0 26px 6px #a24aff66;
-      color: #a24aff;
+      color: transparent;
+      /* Oculta el color del ícono */
       font-size: 2.6rem;
       z-index: 100;
       cursor: pointer;
       transition: box-shadow 0.2s, background 0.22s, transform 0.14s;
       animation: fab-pulse 2.4s infinite alternate;
+
     }
 
     .mystery-fab:hover {
@@ -188,9 +191,12 @@
     .mystery-icon {
       filter: drop-shadow(0 0 10px #a24affcc);
       font-family: 'Courier New', Courier, monospace;
-      font-weight: bold;
-      letter-spacing: 2px;
+      color: transparent;
+      text-shadow:
+        0 0 10px #a24aff,
+        0 0 0px #a24aff;
       font-size: 2.5rem;
+      letter-spacing: 2px;
     }
 
     /* POPUP STYLES */
@@ -416,7 +422,7 @@
   </div>
   <!-- Botón flotante misterioso -->
   <button class="mystery-fab" id="open-mystery-popup" title="¿Misterio?">
-    <span class="mystery-icon">✦</span>
+    <span class="mystery-icon">🗝️</span>
   </button>
   <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY" target="_blank" rel="noopener">
     <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
@@ -441,7 +447,7 @@
         </div>
       </div>
       <div id="bj-status-v2" style="margin-top:1.1em;min-height:1.7em;font-size:1.15em;"></div>
-      <div id="bj-controls-v2" style="margin-top:1.1em;">
+      <div id="bj-controls-v2" style="margin-top:1.1em; text-align:center;">
         <button onclick="bjv2Hit()">Pedir carta</button>
         <button onclick="bjv2Stand()">Plantarse</button>
         <button onclick="bjv2Restart()">Nueva partida</button>
@@ -594,7 +600,7 @@
   }
   function bjv2Stand() {
     if (bjv2Ended || bjv2Lives <= 0) return;
-    while (bjv2Score(bjv2Dealer) < 17) bjv2Dealer.push(bjv2Deck.pop());
+    while (bjv2Score(bjv2Dealer) < 18) bjv2Dealer.push(bjv2Deck.pop());
     let ps = bjv2Score(bjv2Player), ds = bjv2Score(bjv2Dealer);
     if (ds > 21) bjv2End("¡La banca se pasa! ¡Ganas! 🥳", true);
     else if (ps > ds) bjv2End("¡Ganas! 🥳", true);
