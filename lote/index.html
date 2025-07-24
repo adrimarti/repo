@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,10 +16,17 @@
       min-height: 100vh;
       animation: fadein 2s ease-in-out;
     }
+
     @keyframes fadein {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
+
     h1 {
       text-align: center;
       padding: 2rem 1rem 1rem;
@@ -26,12 +34,14 @@
       text-shadow: 0 0 10px #a24aff, 0 0 20px #a24aff;
       color: #ffffff;
     }
+
     .filter-buttons {
       display: flex;
       justify-content: center;
       gap: 1rem;
       margin-bottom: 1rem;
     }
+
     .filter-buttons button {
       background: #a24aff;
       border: none;
@@ -42,9 +52,11 @@
       cursor: pointer;
       transition: background 0.2s;
     }
+
     .filter-buttons button:hover {
       background: #c877ff;
     }
+
     .lotes-container {
       display: flex;
       flex-direction: column;
@@ -53,6 +65,7 @@
       max-width: 900px;
       margin: auto;
     }
+
     .lote {
       display: flex;
       background: rgba(255, 255, 255, 0.05);
@@ -63,10 +76,12 @@
       box-shadow: 0 0 12px rgba(162, 74, 255, 0.2);
       transition: transform 0.2s, box-shadow 0.3s;
     }
+
     .lote:hover {
       transform: scale(1.02);
       box-shadow: 0 0 20px #a24aff;
     }
+
     .lote img {
       width: 100px;
       height: 100px;
@@ -74,19 +89,23 @@
       border-radius: 12px 0 0 12px;
       border-right: 2px solid #a24aff;
     }
+
     .info {
       padding: 1rem;
       flex-grow: 1;
     }
+
     .info h2 {
       margin: 0 0 0.5rem;
       color: #a24aff;
       font-size: 1.3rem;
     }
+
     .info p {
       color: #ccc;
       font-size: 0.95rem;
     }
+
     .like-btn {
       margin-right: 1rem;
       font-size: 1.5rem;
@@ -94,20 +113,23 @@
       transition: transform 0.2s;
       color: #a24aff;
     }
+
     .like-btn.liked i {
       color: #a24aff;
       text-shadow: 0 0 6px #a24aff;
     }
+
     .like-btn i {
       pointer-events: none;
     }
+
     .popup {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       display: none;
       align-items: center;
       justify-content: center;
@@ -115,6 +137,7 @@
       box-sizing: border-box;
       z-index: 1000;
     }
+
     .popup-content {
       background: #1d1035;
       padding: 2rem;
@@ -126,20 +149,24 @@
       box-sizing: border-box;
       animation: fadein 1s ease-in-out;
     }
+
     .popup-content img {
       width: 100%;
       border-radius: 10px;
       margin-bottom: 1rem;
       border: 2px solid #a24aff;
     }
+
     .popup-content h2 {
       color: #a24aff;
       margin-bottom: 0.5rem;
     }
+
     .popup-content p {
       color: #aaa;
       font-size: 1rem;
     }
+
     .popup-buttons {
       display: flex;
       justify-content: center;
@@ -147,6 +174,7 @@
       flex-wrap: wrap;
       margin-top: 1rem;
     }
+
     .popup-buttons button {
       background: #a24aff;
       color: black;
@@ -158,6 +186,7 @@
     }
   </style>
 </head>
+
 <body>
   <h1>Lotes en Subasta 🎁</h1>
   <div class="filter-buttons">
@@ -181,10 +210,10 @@
 
   <script>
     const lotes = [...Array(10).keys()].map(i => ({
-      id: i+1,
-      title: `Lote ${i+1}`,
-      desc: `Descripción del Lote ${i+1}`,
-      img: `https://picsum.photos/300/200?random=${i+1}`
+      id: i + 1,
+      title: `Lote ${i + 1}`,
+      desc: `Descripción del Lote ${i + 1}`,
+      img: `https://picsum.photos/300/200?random=${i + 1}`
     }));
 
     const container = document.getElementById("lotesContainer");
@@ -272,4 +301,5 @@
     window.onload = () => loadLotes();
   </script>
 </body>
+
 </html>

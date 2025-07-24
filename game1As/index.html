@@ -71,6 +71,16 @@
             box-shadow: none;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #18102a !important;
+            /* más oscuro, opcional */
+            color: #aaa !important;
+            border-color: #f0f2;
+        }
+
+
         button:hover {
             background: #2b183c;
             color: #fff;
@@ -151,6 +161,53 @@
             margin-top: 14px;
             min-height: 18px;
         }
+
+        .password-row {
+            display: flex;
+            align-items: stretch;
+            /* Importante: iguala alturas */
+            margin-bottom: 14px;
+            width: 100%;
+        }
+
+        .password-row input {
+            flex: 1 1 auto;
+            border-radius: 5px 0 0 5px;
+            border: 1.5px solid #f0f8;
+            border-right: none;
+            background: #120921;
+            color: #f0f;
+            font-size: 15px;
+            padding: 11px 12px;
+            box-sizing: border-box;
+            outline: none;
+            margin-bottom: 0;
+            min-width: 0;
+        }
+
+        .password-row button {
+            border-radius: 0 5px 5px 0;
+            border: 1.5px solid #f0f8;
+            border-left: none;
+            background: #18102a;
+            color: #f0f;
+            font-size: 15px;
+            padding: 0 18px;
+            min-width: 82px;
+            cursor: pointer;
+            transition: background .15s, color .15s, opacity .2s;
+            height: auto;
+            margin: 0;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-row button:hover {
+            background: #2b183c;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -176,16 +233,21 @@
         <button onclick="actualizarMision()">Actualizar objetivo</button>
     </div>
 
-    <!-- Modal de registro -->
+    <!-- MODAL DE REGISTRO -->
     <div class="modal hidden" id="modalRegistro">
         <div class="modal-content">
             <span class="close" onclick="cerrarRegistro()">&times;</span>
             <h2 style="color:#f0f;">Registro</h2>
             <form id="registroForm" onsubmit="enviarRegistro(event)">
-                <input type="text" id="regNombre" placeholder="Nombre de jugador" required maxlength="30"><br>
-                <input type="text" id="regObjeto" placeholder="¿Qué objeto llevarías?" required maxlength="30"><br>
-                <button type="submit" style="margin-top: 10px;">Solicitar registro</button>
+                <input type="text" id="regNombre" placeholder="Nombre de jugador" required maxlength="30" autocomplete="off"><br>
+                <input type="text" id="regObjeto" placeholder="¿Qué objeto llevarías?" required maxlength="30" autocomplete="off"><br>
+                <div class="password-row">
+                    <input type="text" id="regPass" placeholder="Elige una contraseña" required maxlength="20" autocomplete="off">
+                    <button type="button" id="autoBtn" onclick="autogenerarPass()">Autogen</button>
+                </div>
+                <button type="submit" id="btnRegistro" style="margin-top: 10px;">Solicitar registro</button>
             </form>
+
             <div id="registroMsg"></div>
             <div style="color:#eaeaea; font-size:13px; margin-top:18px;">
                 Si eres aceptado, te añadiremos manualmente y recibirás instrucciones.
@@ -217,7 +279,7 @@
                 visited.add(currentTarget);
                 let targetUser = userMap[currentTarget.toLowerCase()];
                 if (!targetUser) return null;
-                if (targetUser.eliminado !== 'sí') {
+                if (targetUser.eliminado !== 'x') {
                     return targetUser.usuario;
                 } else {
                     currentTarget = targetUser.target;
@@ -231,7 +293,7 @@
             const pass = document.getElementById('password').value.trim();
             const error = document.getElementById('error');
             const u = userMap[user];
-            if (u && u.password === pass && u.eliminado !== 'sí') {
+            if (u && u.password === pass && u.eliminado !== 'x') {
                 currentUser = u;
                 sessionStorage.setItem('usuario', user);
                 mostrarMision();
@@ -264,32 +326,84 @@
         window.onload = function () {
             cargarUsuarios(() => {
                 const user = sessionStorage.getItem('usuario');
-                if (user && userMap[user] && userMap[user].eliminado !== 'sí') {
+                if (user && userMap[user] && userMap[user].eliminado !== 'x') {
                     currentUser = userMap[user];
                     mostrarMision();
                 }
             });
         }
 
-        // Registro minimalista modal
+        let registroEnviado = false;
+
+        function enviarRegistro(event) {
+            event.preventDefault();
+
+            // Validación extra para evitar spam doble
+            if (registroEnviado) {
+                if (!confirm("Ya has enviado tu registro. ¿Quieres enviarlo de nuevo?")) {
+                    return;
+                }
+            }
+
+            const nombre = document.getElementById('regNombre').value.trim();
+            const objeto = document.getElementById('regObjeto').value.trim();
+            const password = document.getElementById('regPass').value.trim();
+            const btn = document.getElementById('btnRegistro');
+
+            // Validación en frontend (por si acaso)
+            if (!nombre || !objeto || !password) {
+                document.getElementById('registroMsg').innerText = "Todos los campos son obligatorios.";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Enviando...";
+
+            fetch('https://formspree.io/f/mzzvenjg', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: new URLSearchParams({ nombre, objeto, password })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        registroEnviado = true;
+                        document.getElementById('registroMsg').innerText = "¡Solicitud enviada! Te contactaremos si eres aceptado.";
+                        btn.innerText = "Enviado";
+                        btn.disabled = true;
+                        document.getElementById('registroForm').reset();
+                    } else {
+                        document.getElementById('registroMsg').innerText = "Error al enviar. Prueba de nuevo o contacta al organizador.";
+                        btn.disabled = false;
+                        btn.innerText = "Solicitar registro";
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('registroMsg').innerText = "Error de red. Intenta más tarde.";
+                    btn.disabled = false;
+                    btn.innerText = "Solicitar registro";
+                });
+        }
+
+        function autogenerarPass() {
+            // Genera una contraseña simple (7-9 chars): palabra + número
+            const palabras = ['noche', 'luz', 'niebla', 'eco', 'sombra', 'misterio', 'violeta', 'caza', 'ruido', 'luna', 'hacha'];
+            const palabra = palabras[Math.floor(Math.random() * palabras.length)];
+            const numero = Math.floor(10 + Math.random() * 90); // 10-99
+            const pass = palabra + numero;
+            document.getElementById('regPass').value = pass;
+        }
         function abrirRegistro() {
             document.getElementById('modalRegistro').classList.remove('hidden');
             document.getElementById('registroMsg').innerText = '';
             document.getElementById('registroForm').reset();
+            document.getElementById('btnRegistro').disabled = false;
+            document.getElementById('btnRegistro').innerText = "Solicitar registro";
+            registroEnviado = false;
         }
         function cerrarRegistro() {
             document.getElementById('modalRegistro').classList.add('hidden');
         }
-        function enviarRegistro(event) {
-            event.preventDefault();
-            const nombre = document.getElementById('regNombre').value.trim();
-            const objeto = document.getElementById('regObjeto').value.trim();
-            const destinatario = "TU_CORREO@GMAIL.COM"; // ← Cambia esto por tu email real
-            const asunto = encodeURIComponent("[Castasound] Solicitud de registro");
-            const cuerpo = encodeURIComponent(`Nombre de jugador: ${nombre}\nObjeto elegido: ${objeto}`);
-            window.open(`mailto:${destinatario}?subject=${asunto}&body=${cuerpo}`);
-            document.getElementById('registroMsg').innerText = "Solicitud preparada. Si tu email no se abre, copia y envía manualmente.";
-        }
+
     </script>
 </body>
 
