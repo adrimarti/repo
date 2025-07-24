@@ -299,8 +299,8 @@
             const horasInicio = 17;
             const horasTotales = 16;
             let hora = ahora.getHours() + ahora.getMinutes() / 60;
-            if (hora < horasInicio) hora += 24;
             if (hora > 9 && hora < horasInicio) hora = horasInicio;
+            if (hora < horasInicio) hora += 24;
 
             const timelineWidth = 3900;
             const leftPx = ((hora - horasInicio) / horasTotales) * timelineWidth;
