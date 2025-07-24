@@ -7,50 +7,149 @@
     <title>Castasound: Misión Secreta</title>
     <style>
         body {
-            background: #0b0c10;
-            color: #ffffff;
+            background: #0c0914;
+            color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            padding: 20px;
+            min-height: 100vh;
         }
 
         .login-box,
         .mission-box {
-            background: #1f2833;
+            background: #160d22;
             border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 0 12px #66fcf1;
-            width: 100%;
-            max-width: 400px;
+            box-shadow: 0 0 12px #f0f2, 0 0 2px #202 inset;
+            padding: 32px 20px 20px 20px;
+            max-width: 370px;
+            margin: 12px;
             text-align: center;
+            position: relative;
+        }
+
+        .login-box h2 {
+            color: #f0f;
+            margin-bottom: 22px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 8px #f0f4, 0 0 1px #fff;
+            font-family: inherit;
         }
 
         input {
-            padding: 10px;
-            width: 90%;
-            margin-bottom: 15px;
-            border-radius: 6px;
-            border: none;
+            width: 89%;
+            padding: 11px;
+            margin-bottom: 16px;
+            border-radius: 5px;
+            border: 1.5px solid #f0f8;
+            background: #120921;
+            color: #f0f;
+            font-size: 15px;
             outline: none;
-            font-size: 16px;
+            transition: border .2s;
+        }
+
+        input:focus {
+            border: 1.5px solid #fff;
         }
 
         button {
-            padding: 10px 20px;
-            background: #45a29e;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+            padding: 10px 0;
+            width: 100%;
+            border-radius: 5px;
+            border: 1.5px solid #f0f7;
+            background: transparent;
+            color: #f0f;
             font-size: 16px;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+            font-family: inherit;
+            box-shadow: none;
+        }
+
+        button:hover {
+            background: #2b183c;
+            color: #fff;
+        }
+
+        .link-btn {
+            background: none;
+            border: none;
+            color: #f0f;
+            padding: 0;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+            margin-bottom: 0;
+            transition: color .2s;
+        }
+
+        .link-btn:hover {
+            color: #fff;
+            text-decoration: underline;
         }
 
         .hidden {
             display: none;
+        }
+
+        #targetName {
+            font-size: 1.25em;
+            color: #fff;
+            margin-top: 16px;
+            letter-spacing: 0.7px;
+            text-shadow: 0 0 5px #f0f2;
+        }
+
+        /* Modal minimalista */
+        .modal {
+            position: fixed;
+            z-index: 99;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(16, 2, 31, 0.92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: #190f23;
+            border-radius: 10px;
+            box-shadow: 0 0 16px #f0f4;
+            padding: 28px 20px 18px 20px;
+            max-width: 310px;
+            width: 92vw;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 20px;
+            color: #f0f;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #registroMsg {
+            color: #f0f;
+            font-size: 14px;
+            margin-top: 14px;
+            min-height: 18px;
         }
     </style>
 </head>
@@ -58,53 +157,67 @@
 <body>
 
     <div class="login-box" id="loginBox">
-        <h2>Castasound: Login</h2>
-        <input type="text" id="username" placeholder="Usuario">
+        <h2>Castasound: Noche Mortal</h2>
+        <input type="text" id="username" placeholder="Nombre de jugador">
         <input type="password" id="password" placeholder="Contraseña">
         <button onclick="login()">Entrar</button>
-        <p id="error" style="color:red;"></p>
+        <button class="link-btn" onclick="abrirRegistro()">¿No tienes cuenta? Regístrate</button>
+        <p id="error" style="color:#f06292; margin-top:12px;"></p>
     </div>
 
     <div class="mission-box hidden" id="missionBox">
-        <h2>🎯 Tu Misión</h2>
-        <p id="targetName"></p>
-        <p style="font-style: italic;">"Tu apuesta está echada. Elimina a esta persona sin ser visto..."</p>
-        <button id="updateTargetBtn" onclick="actualizarMision()">Actualizar misión</button>
+        <h2 style="color:#f0f;">Tu Misión</h2>
+        <div>
+            <span id="targetName"></span>
+        </div>
+        <p style="font-style: italic; color:#f0f; margin-top:12px;">
+            "Busca a tu objetivo en la oscuridad. La noche no tiene piedad."
+        </p>
+        <button onclick="actualizarMision()">Actualizar objetivo</button>
     </div>
 
+    <!-- Modal de registro -->
+    <div class="modal hidden" id="modalRegistro">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarRegistro()">&times;</span>
+            <h2 style="color:#f0f;">Registro</h2>
+            <form id="registroForm" onsubmit="enviarRegistro(event)">
+                <input type="text" id="regNombre" placeholder="Nombre de jugador" required maxlength="30"><br>
+                <input type="text" id="regObjeto" placeholder="¿Qué objeto llevarías?" required maxlength="30"><br>
+                <button type="submit" style="margin-top: 10px;">Solicitar registro</button>
+            </form>
+            <div id="registroMsg"></div>
+            <div style="color:#eaeaea; font-size:13px; margin-top:18px;">
+                Si eres aceptado, te añadiremos manualmente y recibirás instrucciones.
+            </div>
+        </div>
+    </div>
 
     <script>
         let users = [];
         let userMap = {};
         let currentUser = null;
 
-        // Carga los usuarios desde la hoja de Google
         function cargarUsuarios(callback) {
             fetch('https://opensheet.elk.sh/1gLaZyD-og9Tp2l3n--2GP23a1kLqDmwKI1yGD1G3zKc/usuarios')
                 .then(res => res.json())
                 .then(data => {
                     users = data;
                     userMap = {};
-                    data.forEach(u => {
-                        userMap[u.usuario.toLowerCase()] = u;
-                    });
+                    data.forEach(u => userMap[u.usuario.toLowerCase()] = u);
                     if (callback) callback();
                 });
         }
 
-        // Lógica recursiva para buscar el siguiente target válido
         function getNextTarget(user) {
             let visited = new Set();
             let currentTarget = user.target;
-
             while (currentTarget) {
-                if (visited.has(currentTarget)) {
-                    return null; // Evita bucles infinitos
-                }
+                if (visited.has(currentTarget)) return null;
                 visited.add(currentTarget);
                 let targetUser = userMap[currentTarget.toLowerCase()];
                 if (!targetUser) return null;
-                if (targetUser.eliminado !== 'x') {
+                if (targetUser.eliminado !== 'sí') {
                     return targetUser.usuario;
                 } else {
                     currentTarget = targetUser.target;
@@ -113,58 +226,71 @@
             return null;
         }
 
-        // Al hacer login, guarda en sessionStorage
         function login() {
             const user = document.getElementById('username').value.trim().toLowerCase();
             const pass = document.getElementById('password').value.trim();
             const error = document.getElementById('error');
             const u = userMap[user];
-
-            if (u && u.password === pass && u.eliminado !== 'x') {
+            if (u && u.password === pass && u.eliminado !== 'sí') {
                 currentUser = u;
-                sessionStorage.setItem('usuario', user); // Guarda usuario
+                sessionStorage.setItem('usuario', user);
                 mostrarMision();
             } else {
-                error.innerText = "Usuario o contraseña incorrectos, o eliminado.";
+                error.innerText = "Usuario, contraseña incorrecta o eliminado.";
             }
         }
 
-        // Función para mostrar la misión
         function mostrarMision() {
             document.getElementById('loginBox').classList.add('hidden');
             document.getElementById('missionBox').classList.remove('hidden');
             const nextTarget = getNextTarget(currentUser);
-            document.getElementById('targetName').innerText = nextTarget ? nextTarget : "No hay más objetivos.";
-            // Si quieres, aquí puedes mostrar botón de admin, etc
+            document.getElementById('targetName').innerText = nextTarget ? `🔪 ${nextTarget}` : "🎉 No quedan más objetivos.";
         }
 
-        // Botón para actualizar misión
         function actualizarMision() {
             cargarUsuarios(() => {
-                // Actualiza el usuario actual con los nuevos datos
                 const user = sessionStorage.getItem('usuario');
                 if (user && userMap[user]) {
                     currentUser = userMap[user];
                     mostrarMision();
                 } else {
-                    // Si el usuario ya no existe o ha sido eliminado, regresa al login
                     sessionStorage.removeItem('usuario');
                     window.location.reload();
                 }
             });
         }
 
-        // Al cargar la página, revisa si hay sesión guardada
+        // Sesión automática
         window.onload = function () {
             cargarUsuarios(() => {
                 const user = sessionStorage.getItem('usuario');
-                if (user && userMap[user] && userMap[user].eliminado !== 'x') {
+                if (user && userMap[user] && userMap[user].eliminado !== 'sí') {
                     currentUser = userMap[user];
                     mostrarMision();
                 }
             });
         }
 
+        // Registro minimalista modal
+        function abrirRegistro() {
+            document.getElementById('modalRegistro').classList.remove('hidden');
+            document.getElementById('registroMsg').innerText = '';
+            document.getElementById('registroForm').reset();
+        }
+        function cerrarRegistro() {
+            document.getElementById('modalRegistro').classList.add('hidden');
+        }
+        function enviarRegistro(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('regNombre').value.trim();
+            const objeto = document.getElementById('regObjeto').value.trim();
+            const destinatario = "TU_CORREO@GMAIL.COM"; // ← Cambia esto por tu email real
+            const asunto = encodeURIComponent("[Castasound] Solicitud de registro");
+            const cuerpo = encodeURIComponent(`Nombre de jugador: ${nombre}\nObjeto elegido: ${objeto}`);
+            window.open(`mailto:${destinatario}?subject=${asunto}&body=${cuerpo}`);
+            document.getElementById('registroMsg').innerText = "Solicitud preparada. Si tu email no se abre, copia y envía manualmente.";
+        }
     </script>
+</body>
 
 </html>
