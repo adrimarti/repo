@@ -468,11 +468,11 @@
             const nombre = document.getElementById('regNombre').value.trim();
             const objeto = document.getElementById('regObjeto').value.trim();
             const usuario = document.getElementById('regUsuario').value.trim();
-            const password = document.getElementById('regPass').value.trim();
+            const contorno = document.getElementById('regPass').value.trim();
             const btn = document.getElementById('btnRegistro');
 
             // Validación en frontend (por si acaso)
-            if (!nombre || !objeto || !password || !usuario) {
+            if (!nombre || !objeto || !contorno || !usuario) {
                 document.getElementById('registroMsg').innerText = "Todos los campos son obligatorios.";
                 return;
             }
@@ -483,7 +483,7 @@
             fetch('https://formspree.io/f/mzzvenjg', {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' },
-                body: new URLSearchParams({ nombre, objeto, usuario, password })
+                body: new URLSearchParams({ nombre, objeto, usuario, contorno })
             })
                 .then(response => {
                     if (response.ok) {
