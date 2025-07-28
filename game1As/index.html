@@ -375,10 +375,16 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
     <script>
         let users = [];
         let userMap = {};
         let currentUser = null;
+
+        function hashSha512(text) {
+            return CryptoJS.SHA512(text).toString(CryptoJS.enc.Hex);
+        }
 
         function cargarUsuarios(callback) {
             fetch('https://opensheet.elk.sh/1gLaZyD-og9Tp2l3n--2GP23a1kLqDmwKI1yGD1G3zKc/usuarios')
@@ -410,7 +416,7 @@
 
         function login() {
             const user = document.getElementById('username').value.trim().toLowerCase();
-            const pass = document.getElementById('password').value.trim();
+            const pass = hashSha512(document.getElementById('password').value.trim());
             const error = document.getElementById('error');
             const u = userMap[user];
             if (u && u.password === pass && u.eliminado !== 'x') {
