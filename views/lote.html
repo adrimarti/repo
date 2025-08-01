@@ -57,6 +57,10 @@
       background: #c877ff;
     }
 
+    .filter-buttons button.active {
+      background: #c877ff;
+    }
+
     .lotes-container {
       display: flex;
       flex-direction: column;
@@ -190,8 +194,8 @@
 <body>
   <h1>Lotes en Subasta 🎁</h1>
   <div class="filter-buttons">
-    <button onclick="loadLotes('all')">Todos</button>
-    <button onclick="loadLotes('liked')">Favoritos</button>
+    <button data-mode="all" class="active" onclick="loadLotes('all')">Todos</button>
+    <button data-mode="liked" onclick="loadLotes('liked')">Favoritos</button>
   </div>
 
   <div class="lotes-container" id="lotesContainer"></div>
@@ -228,6 +232,9 @@
       if (mode === 'liked') {
         filtered = lotes.filter(lote => sessionStorage.getItem(`like_${lote.id}`));
       }
+      document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.querySelector(`.filter-buttons button[data-mode="${mode}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
       filtered.forEach(lote => {
         const div = document.createElement("div");
         div.className = "lote";
@@ -298,7 +305,7 @@
       }
     }
 
-    window.onload = () => loadLotes();
+    loadLotes();
   </script>
 </body>
 

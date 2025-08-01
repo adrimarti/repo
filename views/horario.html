@@ -276,8 +276,16 @@
             document.getElementById('now-time').style.left = (leftPx + PADDING_LEFT) + 'px';
         }
 
-        mostrarDia('viernes');
-        setInterval(actualizarLineaAhora, 60000);
+        function initHorario() {
+            mostrarDia('viernes');
+            setInterval(actualizarLineaAhora, 60000);
+        }
+
+        if (document.readyState !== 'loading') {
+            initHorario();
+        } else {
+            document.addEventListener('DOMContentLoaded', initHorario);
+        }
     </script>
 </body>
 
