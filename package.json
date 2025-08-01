@@ -1,0 +1,12 @@
+{
+  "name": "castasound-spa",
+  "version": "1.0.0",
+  "description": "Castasound como aplicación de una sola página",
+  "type": "module",
+  "scripts": {
+    "test": "echo 'no tests configured'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

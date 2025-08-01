@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Castasound: Misión Secreta</title>
+    <title>Castasound: Asesino</title>
     <style>
         body {
             background: #000;
@@ -97,7 +97,7 @@
             box-shadow: 0 0 16px #a24aff88;
         }
 
-        button {
+        button:not(#menu-toggle) {
             padding: 12px 0;
             width: 100%;
             border-radius: 10px;
@@ -114,7 +114,7 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
-        button:disabled {
+        button:not(#menu-toggle):disabled {
             opacity: 0.6;
             cursor: not-allowed;
             background: #18102a !important;
@@ -122,7 +122,7 @@
             border-color: #a24aff44;
         }
 
-        button:hover {
+        button:not(#menu-toggle):hover {
             background: #a24aff;
             color: #fff;
             box-shadow: 0 0 22px #a24aff;
@@ -289,49 +289,12 @@
             box-shadow: 0 0 18px #a24aff;
         }
 
-
-        .timeline-logo-title {
-            position: fixed;
-            top: 18px;
-            left: 18px;
-            font-size: 2.2em;
-            color: #a24aff;
-            background: rgba(14, 5, 26, 0.80);
-            padding: 0.18em 0.85em 0.13em 0.85em;
-            border-radius: 12px;
-            text-shadow: 0 0 12px #a24aff, 0 0 18px #fff2;
-            text-decoration: none;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-            z-index: 99;
-            box-shadow: 0 0 16px #a24aff55;
-            letter-spacing: 2px;
-            transition: color 0.18s, background 0.19s, box-shadow 0.17s;
-        }
-
-        .timeline-logo-title:hover {
-            color: #fff;
-            background: #a24aff;
-            box-shadow: 0 0 28px #a24affcc;
-        }
-
-        @media screen and (max-width: 600px) {
-            .timeline-logo-title {
-                font-size: 1.6em;
-                top: 10px;
-                left: 10px;
-                padding: 0.14em 0.7em 0.12em 0.7em;
-                border-radius: 10px;
-            }
-        }
     </style>
 
 </head>
 
 <body>
-    <a href="../index.html" class="timeline-logo-title" title="Volver a inicio">
-        C
-    </a>
+    
     <div class="login-box" id="loginBox">
         <h2>Castasound: Noche Mortal</h2>
         <input type="text" id="username" placeholder="Nombre de jugador">
@@ -378,159 +341,159 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <script>
-        let users = [];
-        let userMap = {};
-        let currentUser = null;
+        (function () {
+            let users = [];
+            let userMap = {};
+            let currentUser = null;
+            let registroEnviado = false;
 
-        function hashSha512(text) {
-            return CryptoJS.SHA512(text).toString(CryptoJS.enc.Hex);
-        }
+            function hashSha512(text) {
+                return CryptoJS.SHA512(text).toString(CryptoJS.enc.Hex);
+            }
 
-        function cargarUsuarios(callback) {
-            fetch('https://opensheet.elk.sh/1gLaZyD-og9Tp2l3n--2GP23a1kLqDmwKI1yGD1G3zKc/usuarios')
-                .then(res => res.json())
-                .then(data => {
-                    users = data;
-                    userMap = {};
-                    data.forEach(u => userMap[u.usuario.toLowerCase()] = u);
-                    if (callback) callback();
+            function cargarUsuarios(callback) {
+                fetch('https://opensheet.elk.sh/1gLaZyD-og9Tp2l3n--2GP23a1kLqDmwKI1yGD1G3zKc/usuarios')
+                    .then(res => res.json())
+                    .then(data => {
+                        users = data;
+                        userMap = {};
+                        data.forEach(u => (userMap[u.usuario.toLowerCase()] = u));
+                        if (callback) callback();
+                    });
+            }
+
+            function getNextTarget(user) {
+                const visited = new Set();
+                let currentTarget = user.target;
+                while (currentTarget) {
+                    if (visited.has(currentTarget)) return null;
+                    visited.add(currentTarget);
+                    const targetUser = userMap[currentTarget.toLowerCase()];
+                    if (!targetUser) return null;
+                    if (targetUser.eliminado !== 'x') {
+                        return targetUser.usuario;
+                    } else {
+                        currentTarget = targetUser.target;
+                    }
+                }
+                return null;
+            }
+
+            window.login = function () {
+                const user = document.getElementById('username').value.trim().toLowerCase();
+                const pass = hashSha512(document.getElementById('password').value.trim());
+                const error = document.getElementById('error');
+                const u = userMap[user];
+                if (u && u.password === pass && u.eliminado !== 'x') {
+                    currentUser = u;
+                    sessionStorage.setItem('usuario', user);
+                    mostrarMision();
+                } else {
+                    error.innerText = "Usuario, contraseña incorrecta o eliminado.";
+                }
+            };
+
+            function mostrarMision() {
+                document.getElementById('loginBox').classList.add('hidden');
+                document.getElementById('missionBox').classList.remove('hidden');
+                const nextTarget = getNextTarget(currentUser);
+                document.getElementById('targetName').innerText = nextTarget ? `🔪 ${nextTarget}` : "🎉 No quedan más objetivos.";
+            }
+
+            window.actualizarMision = function () {
+                cargarUsuarios(() => {
+                    const user = sessionStorage.getItem('usuario');
+                    if (user && userMap[user]) {
+                        currentUser = userMap[user];
+                        mostrarMision();
+                    } else {
+                        sessionStorage.removeItem('usuario');
+                        window.location.reload();
+                    }
                 });
-        }
+            };
 
-        function getNextTarget(user) {
-            let visited = new Set();
-            let currentTarget = user.target;
-            while (currentTarget) {
-                if (visited.has(currentTarget)) return null;
-                visited.add(currentTarget);
-                let targetUser = userMap[currentTarget.toLowerCase()];
-                if (!targetUser) return null;
-                if (targetUser.eliminado !== 'x') {
-                    return targetUser.usuario;
-                } else {
-                    currentTarget = targetUser.target;
+            window.enviarRegistro = function (event) {
+                event.preventDefault();
+
+                if (registroEnviado) {
+                    if (!confirm("Ya has enviado tu registro. ¿Quieres enviarlo de nuevo?")) {
+                        return;
+                    }
                 }
-            }
-            return null;
-        }
 
-        function login() {
-            const user = document.getElementById('username').value.trim().toLowerCase();
-            const pass = hashSha512(document.getElementById('password').value.trim());
-            const error = document.getElementById('error');
-            const u = userMap[user];
-            if (u && u.password === pass && u.eliminado !== 'x') {
-                currentUser = u;
-                sessionStorage.setItem('usuario', user);
-                mostrarMision();
-            } else {
-                error.innerText = "Usuario, contraseña incorrecta o eliminado.";
-            }
-        }
+                const nombre = document.getElementById('regNombre').value.trim();
+                const objeto = document.getElementById('regObjeto').value.trim();
+                const usuario = document.getElementById('regUsuario').value.trim();
+                const contorno = document.getElementById('regPass').value.trim();
+                const btn = document.getElementById('btnRegistro');
 
-        function mostrarMision() {
-            document.getElementById('loginBox').classList.add('hidden');
-            document.getElementById('missionBox').classList.remove('hidden');
-            const nextTarget = getNextTarget(currentUser);
-            document.getElementById('targetName').innerText = nextTarget ? `🔪 ${nextTarget}` : "🎉 No quedan más objetivos.";
-        }
-
-        function actualizarMision() {
-            cargarUsuarios(() => {
-                const user = sessionStorage.getItem('usuario');
-                if (user && userMap[user]) {
-                    currentUser = userMap[user];
-                    mostrarMision();
-                } else {
-                    sessionStorage.removeItem('usuario');
-                    window.location.reload();
-                }
-            });
-        }
-
-        // Sesión automática
-        window.onload = function () {
-            cargarUsuarios(() => {
-                const user = sessionStorage.getItem('usuario');
-                if (user && userMap[user] && userMap[user].eliminado !== 'x') {
-                    currentUser = userMap[user];
-                    mostrarMision();
-                }
-            });
-        }
-
-        let registroEnviado = false;
-
-        function enviarRegistro(event) {
-            event.preventDefault();
-
-            // Validación extra para evitar spam doble
-            if (registroEnviado) {
-                if (!confirm("Ya has enviado tu registro. ¿Quieres enviarlo de nuevo?")) {
+                if (!nombre || !objeto || !contorno || !usuario) {
+                    document.getElementById('registroMsg').innerText = "Todos los campos son obligatorios.";
                     return;
                 }
-            }
 
-            const nombre = document.getElementById('regNombre').value.trim();
-            const objeto = document.getElementById('regObjeto').value.trim();
-            const usuario = document.getElementById('regUsuario').value.trim();
-            const contorno = document.getElementById('regPass').value.trim();
-            const btn = document.getElementById('btnRegistro');
+                btn.disabled = true;
+                btn.innerText = "Enviando...";
 
-            // Validación en frontend (por si acaso)
-            if (!nombre || !objeto || !contorno || !usuario) {
-                document.getElementById('registroMsg').innerText = "Todos los campos son obligatorios.";
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "Enviando...";
-
-            fetch('https://formspree.io/f/mzzvenjg', {
-                method: 'POST',
-                headers: { 'Accept': 'application/json' },
-                body: new URLSearchParams({ nombre, objeto, usuario, contorno })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        registroEnviado = true;
-                        document.getElementById('registroMsg').innerText = "¡Solicitud enviada! Te contactaremos si eres aceptado.";
-                        btn.innerText = "Enviado";
-                        btn.disabled = true;
-                        document.getElementById('registroForm').reset();
-                    } else {
-                        document.getElementById('registroMsg').innerText = "Error al enviar. Prueba de nuevo o contacta al organizador.";
+                fetch('https://formspree.io/f/mzzvenjg', {
+                    method: 'POST',
+                    headers: { Accept: 'application/json' },
+                    body: new URLSearchParams({ nombre, objeto, usuario, contorno })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            registroEnviado = true;
+                            document.getElementById('registroMsg').innerText = "¡Solicitud enviada! Te contactaremos si eres aceptado.";
+                            btn.innerText = "Enviado";
+                            btn.disabled = true;
+                            document.getElementById('registroForm').reset();
+                        } else {
+                            document.getElementById('registroMsg').innerText = "Error al enviar. Prueba de nuevo o contacta al organizador.";
+                            btn.disabled = false;
+                            btn.innerText = "Solicitar registro";
+                        }
+                    })
+                    .catch(() => {
+                        document.getElementById('registroMsg').innerText = "Error de red. Intenta más tarde.";
                         btn.disabled = false;
                         btn.innerText = "Solicitar registro";
+                    });
+            };
+
+            window.autogenerarPass = function () {
+                const palabras = ['noche', 'luz', 'niebla', 'eco', 'sombra', 'misterio', 'violeta', 'caza', 'ruido', 'luna', 'hacha'];
+                const palabra = palabras[Math.floor(Math.random() * palabras.length)];
+                const numero = Math.floor(10 + Math.random() * 90);
+                const pass = palabra + numero;
+                document.getElementById('regPass').value = pass;
+            };
+
+            window.abrirRegistro = function () {
+                document.getElementById('modalRegistro').classList.remove('hidden');
+                document.getElementById('registroMsg').innerText = '';
+                document.getElementById('registroForm').reset();
+                document.getElementById('btnRegistro').disabled = false;
+                document.getElementById('btnRegistro').innerText = "Solicitar registro";
+                registroEnviado = false;
+            };
+
+            window.cerrarRegistro = function () {
+                document.getElementById('modalRegistro').classList.add('hidden');
+            };
+
+            function initGame() {
+                cargarUsuarios(() => {
+                    const user = sessionStorage.getItem('usuario');
+                    if (user && userMap[user] && userMap[user].eliminado !== 'x') {
+                        currentUser = userMap[user];
+                        mostrarMision();
                     }
-                })
-                .catch(() => {
-                    document.getElementById('registroMsg').innerText = "Error de red. Intenta más tarde.";
-                    btn.disabled = false;
-                    btn.innerText = "Solicitar registro";
                 });
-        }
+            }
 
-        function autogenerarPass() {
-            // Genera una contraseña simple (7-9 chars): palabra + número
-            const palabras = ['noche', 'luz', 'niebla', 'eco', 'sombra', 'misterio', 'violeta', 'caza', 'ruido', 'luna', 'hacha'];
-            const palabra = palabras[Math.floor(Math.random() * palabras.length)];
-            const numero = Math.floor(10 + Math.random() * 90); // 10-99
-            const pass = palabra + numero;
-            document.getElementById('regPass').value = pass;
-        }
-        function abrirRegistro() {
-            document.getElementById('modalRegistro').classList.remove('hidden');
-            document.getElementById('registroMsg').innerText = '';
-            document.getElementById('registroForm').reset();
-            document.getElementById('btnRegistro').disabled = false;
-            document.getElementById('btnRegistro').innerText = "Solicitar registro";
-            registroEnviado = false;
-        }
-        function cerrarRegistro() {
-            document.getElementById('modalRegistro').classList.add('hidden');
-        }
-
+            initGame();
+        })();
     </script>
 </body>
 
