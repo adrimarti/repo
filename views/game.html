@@ -97,7 +97,7 @@
             box-shadow: 0 0 16px #a24aff88;
         }
 
-        button {
+        button:not(#menu-toggle) {
             padding: 12px 0;
             width: 100%;
             border-radius: 10px;
@@ -114,7 +114,7 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
-        button:disabled {
+        button:not(#menu-toggle):disabled {
             opacity: 0.6;
             cursor: not-allowed;
             background: #18102a !important;
@@ -122,7 +122,7 @@
             border-color: #a24aff44;
         }
 
-        button:hover {
+        button:not(#menu-toggle):hover {
             background: #a24aff;
             color: #fff;
             box-shadow: 0 0 22px #a24aff;

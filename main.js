@@ -6,7 +6,11 @@ const routes = {
 };
 
 async function loadRoute() {
-  document.getElementById('side-menu').classList.remove('open');
+  const sideMenu = document.getElementById('side-menu');
+  const menuBtn = document.getElementById('menu-toggle');
+  sideMenu.classList.remove('open');
+  menuBtn.classList.remove('open');
+  menuBtn.textContent = '☰';
   const path = location.hash.slice(1) || '/';
   const route = routes[path] || routes['/'];
   // limpia los estilos y scripts previamente inyectados
@@ -57,9 +61,15 @@ window.addEventListener('DOMContentLoaded', () => {
   const sideMenu = document.getElementById('side-menu');
   menuBtn.addEventListener('click', () => {
     sideMenu.classList.toggle('open');
+    menuBtn.classList.toggle('open');
+    menuBtn.textContent = sideMenu.classList.contains('open') ? '✕' : '☰';
   });
   sideMenu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => sideMenu.classList.remove('open'));
+    link.addEventListener('click', () => {
+      sideMenu.classList.remove('open');
+      menuBtn.classList.remove('open');
+      menuBtn.textContent = '☰';
+    });
   });
   loadRoute();
 });
