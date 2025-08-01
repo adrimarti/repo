@@ -1,7 +1,8 @@
 const routes = {
   '/': 'views/home.html',
   '/asesino': 'views/asesino.html',
-  '/horario': 'views/horario.html'
+  '/horario': 'views/horario.html',
+  '/mapa': 'views/mapa.html'
 };
 
 async function loadRoute() {
