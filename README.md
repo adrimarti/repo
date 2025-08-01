@@ -5,7 +5,7 @@ El sitio ha sido reestructurado como una aplicación de una sola página (SPA). 
 Los estilos y scripts definidos en cada vista se inyectan automáticamente al navegar, por lo que cada sección mantiene su apariencia y funcionalidad originales.
 
 ## Uso
-Solo abre `index.html` en tu navegador. Navega entre secciones utilizando la barra de navegación o las rutas con hash:
+Solo abre `index.html` en tu navegador. Navega entre secciones utilizando el menú lateral o las rutas con hash:
 - `#/` inicio
 - `#/game` juego de asesino
 - `#/horario` timeline de actividades

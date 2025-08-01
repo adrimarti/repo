@@ -6,6 +6,7 @@ const routes = {
 };
 
 async function loadRoute() {
+  document.body.classList.remove('menu-open');
   const path = location.hash.slice(1) || '/';
   const route = routes[path] || routes['/'];
   // limpia los estilos y scripts previamente inyectados
@@ -51,4 +52,13 @@ async function loadRoute() {
 }
 
 window.addEventListener('hashchange', loadRoute);
-window.addEventListener('DOMContentLoaded', loadRoute);
+window.addEventListener('DOMContentLoaded', () => {
+  const menuBtn = document.getElementById('menu-toggle');
+  menuBtn.addEventListener('click', () => {
+    document.body.classList.toggle('menu-open');
+  });
+  document.querySelectorAll('#side-menu a').forEach(link => {
+    link.addEventListener('click', () => document.body.classList.remove('menu-open'));
+  });
+  loadRoute();
+});
