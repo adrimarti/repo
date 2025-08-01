@@ -23,6 +23,9 @@ async function loadRoute() {
   menuBtn.textContent = '☰';
   const path = location.hash.slice(1) || '/';
   const route = routes[path] || routes['/'];
+  const app = document.getElementById('app');
+  app.style.visibility = 'hidden';
+
   // limpia los estilos y scripts previamente inyectados
   document.querySelectorAll('[data-router]').forEach(el => el.remove());
 
@@ -30,21 +33,30 @@ async function loadRoute() {
   const html = await res.text();
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
-  const app = document.getElementById('app');
 
-  // carga el contenido principal de la vista
-  app.innerHTML = doc.body ? doc.body.innerHTML : html;
-
-  // inyecta estilos de la vista
+  // inyecta estilos de la vista y espera a que carguen
+  const stylePromises = [];
   if (doc.head) {
     doc.head
       .querySelectorAll('link[rel="stylesheet"], style')
       .forEach(el => {
         const styleEl = el.cloneNode(true);
         styleEl.setAttribute('data-router', '');
+        const p = new Promise(resolve => {
+          if (styleEl.tagName === 'LINK') {
+            styleEl.addEventListener('load', resolve, { once: true });
+            styleEl.addEventListener('error', resolve, { once: true });
+          } else {
+            resolve();
+          }
+        });
+        stylePromises.push(p);
         document.head.appendChild(styleEl);
       });
   }
+
+  // carga el contenido principal de la vista
+  app.innerHTML = doc.body ? doc.body.innerHTML : html;
 
   // ejecuta scripts de la vista
   const scripts = [
@@ -62,6 +74,11 @@ async function loadRoute() {
     }
     document.body.appendChild(newScript);
     oldScript.remove();
+  });
+
+  await Promise.all(stylePromises);
+  requestAnimationFrame(() => {
+    app.style.visibility = '';
   });
 }
 

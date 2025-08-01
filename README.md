@@ -3,6 +3,7 @@
 El sitio ha sido reestructurado como una aplicación de una sola página (SPA). Las páginas originales ahora se cargan dinámicamente desde la carpeta `views` mediante un router básico escrito en JavaScript.
 
 Los estilos y scripts definidos en cada vista se inyectan automáticamente al navegar, por lo que cada sección mantiene su apariencia y funcionalidad originales.
+Durante la transición, el contenedor principal permanece oculto hasta que los estilos de la vista han cargado para evitar parpadeos sin formato.
 
 Antes de cargar una nueva vista, el router ejecuta una función global `window.currentCleanup` si existe; así cada sección puede liberar temporizadores o escuchas que ya no necesite.
 
