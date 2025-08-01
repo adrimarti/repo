@@ -6,6 +6,16 @@ const routes = {
 };
 
 async function loadRoute() {
+  // permite que cada vista ejecute su propia limpieza
+  if (window.currentCleanup) {
+    try {
+      window.currentCleanup();
+    } catch (err) {
+      console.error(err);
+    }
+    window.currentCleanup = null;
+  }
+
   const sideMenu = document.getElementById('side-menu');
   const menuBtn = document.getElementById('menu-toggle');
   sideMenu.classList.remove('open');

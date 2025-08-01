@@ -4,6 +4,8 @@ El sitio ha sido reestructurado como una aplicación de una sola página (SPA). 
 
 Los estilos y scripts definidos en cada vista se inyectan automáticamente al navegar, por lo que cada sección mantiene su apariencia y funcionalidad originales.
 
+Antes de cargar una nueva vista, el router ejecuta una función global `window.currentCleanup` si existe; así cada sección puede liberar temporizadores o escuchas que ya no necesite.
+
 La navegación se realiza mediante un menú lateral flotante que se desliza sobre el contenido sin desplazarlo.
 
 ## Uso

@@ -185,6 +185,7 @@
         <div class="now-time" id="now-time"></div>
     </div>
     <script>
+        (function () {
         const eventos = {
             viernes: [
                 { hora: '17:10', duracion: 50, top: 60, titulo: 'Llegada 🎒', detalle: 'Acreditación y bienvenida' },
@@ -218,6 +219,7 @@
         };
 
         let diaActual = 'viernes';
+        let intervaloId;
 
         function mostrarDia(dia) {
             const PADDING_LEFT = 60; // igual al de .timeline-wrapper
@@ -278,14 +280,14 @@
 
         function initHorario() {
             mostrarDia('viernes');
-            setInterval(actualizarLineaAhora, 60000);
+            actualizarLineaAhora();
+            clearInterval(intervaloId);
+            intervaloId = setInterval(actualizarLineaAhora, 60000);
         }
 
-        if (document.readyState !== 'loading') {
-            initHorario();
-        } else {
-            document.addEventListener('DOMContentLoaded', initHorario);
-        }
+        initHorario();
+        window.currentCleanup = () => clearInterval(intervaloId);
+        })();
     </script>
 </body>
 
