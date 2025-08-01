@@ -12,6 +12,6 @@ La navegación se realiza mediante un menú lateral flotante que se desliza sobr
 ## Uso
 Solo abre `index.html` en tu navegador. Navega entre secciones utilizando el menú lateral o las rutas con hash:
 - `#/` inicio
-- `#/game` juego de asesino
+- `#/asesino` asesino
 - `#/horario` timeline de actividades
-- `#/lote` subasta de lotes
+- próximamente más misterios

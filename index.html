@@ -4,8 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CASTASOUND SPA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; background: #000; color: #fff; font-family: 'Courier New', Courier, monospace; }
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: 'Courier New', Courier, monospace;
+    }
     #menu-toggle {
       position: fixed;
       top: 10px;
@@ -15,7 +23,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #111;
+      background: rgba(10, 0, 20, 0.6);
       color: #a24aff;
       border: 2px solid #a24aff;
       border-radius: 50%;
@@ -24,6 +32,10 @@
       cursor: pointer;
       z-index: 1001;
       transition: left 0.3s ease;
+      box-shadow: 0 0 10px #a24affaa, 0 0 20px #a24aff55;
+      backdrop-filter: blur(4px);
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
     }
     #menu-toggle.open {
       left: 210px;
@@ -34,7 +46,7 @@
       left: 0;
       width: 200px;
       height: 100%;
-      background: #111;
+      background: rgba(10, 0, 20, 0.6);
       padding: 2rem 1rem;
       display: flex;
       flex-direction: column;
@@ -42,18 +54,34 @@
       transform: translateX(-100%);
       transition: transform 0.3s ease;
       z-index: 1000;
+      box-shadow: 0 0 20px #a24aff44, 0 0 40px #a24aff22;
+      backdrop-filter: blur(8px);
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    #side-menu a { color: #a24aff; text-decoration: none; }
-    #side-menu.open { transform: translateX(0); }
+    #side-menu a,
+    #side-menu span {
+      color: #fff;
+      text-decoration: none;
+      text-shadow: 0 0 5px #a24aff, 0 0 10px #a24aff;
+    }
+    #side-menu .coming {
+      opacity: 0.6;
+      cursor: default;
+    }
+    #side-menu.open {
+      transform: translateX(0);
+    }
   </style>
 </head>
 <body>
   <button id="menu-toggle" aria-label="Menú">☰</button>
   <nav id="side-menu">
     <a href="#/">Inicio</a>
-    <a href="#/game">Juego</a>
+    <a href="#/asesino">Asesino</a>
     <a href="#/horario">Horario</a>
-    <a href="#/lote">Lote</a>
+    <span class="coming">...</span>
   </nav>
   <div id="app"></div>
   <script type="module" src="main.js"></script>
