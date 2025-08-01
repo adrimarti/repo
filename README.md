@@ -4,6 +4,8 @@ El sitio ha sido reestructurado como una aplicación de una sola página (SPA). 
 
 Los estilos y scripts definidos en cada vista se inyectan automáticamente al navegar, por lo que cada sección mantiene su apariencia y funcionalidad originales.
 
+La navegación se realiza mediante un menú lateral flotante que se desliza sobre el contenido sin desplazarlo.
+
 ## Uso
 Solo abre `index.html` en tu navegador. Navega entre secciones utilizando el menú lateral o las rutas con hash:
 - `#/` inicio
