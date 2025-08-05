@@ -196,6 +196,9 @@
     }
 
     #game-overlay h2 {
+      white-space: nowrap;
+      text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
+      text-align: center;
       font-size: 2rem;
       margin-bottom: 0.5rem;
     }
@@ -306,6 +309,54 @@
       margin-top: 1rem;
       text-align: center;
     }
+
+    /* ==== Colores de botones (más oscuros) ==== */
+    #camels .bet-btn[data-camel="0"] {
+      color: #d4a017;
+      /* Amarillo oscuro */
+    }
+
+    #camels .bet-btn[data-camel="1"] {
+      color: #cc3333;
+      /* Rojo oscuro */
+    }
+
+    #camels .bet-btn[data-camel="2"] {
+      color: #339933;
+      /* Verde oscuro */
+    }
+
+    #camels .bet-btn[data-camel="3"] {
+      color: #1a66cc;
+      /* Azul oscuro */
+    }
+
+    /* ==== Camellos en pista con doble sombra ==== */
+    #race-track .camel[data-camel="0"] {
+      text-shadow:
+        0 0 3px #d4a017,
+        /* sombra cercana intensa */
+        0 0 8px #ffcc00;
+      /* brillo más suave */
+    }
+
+    #race-track .camel[data-camel="1"] {
+      text-shadow:
+        0 0 3px #cc3333,
+        0 0 8px #ff6666;
+    }
+
+    #race-track .camel[data-camel="2"] {
+      text-shadow:
+        0 0 3px #339933,
+        0 0 8px #66cc66;
+    }
+
+    #race-track .camel[data-camel="3"] {
+      text-shadow:
+        0 0 3px #1a66cc,
+        0 0 8px #3399ff;
+    }
   </style>
 </head>
 
@@ -313,7 +364,7 @@
   <div id="home-root">
     <div id="game-overlay">
       <div id="game-container">
-        <h2>Apuesta al camello ganador</h2>
+        <h2>Apuesta al GANADOR</h2>
         <div id="camels">
           <button class="bet-btn" data-camel="0">🐪 1</button>
           <button class="bet-btn" data-camel="1">🐪 2</button>
@@ -322,10 +373,22 @@
         </div>
         <button id="start-race" disabled>Iniciar carrera</button>
         <div id="race-track" style="display:none;">
-          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="0">🐪</span></div>
-          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="1">🐪</span></div>
-          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="2">🐪</span></div>
-          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="3">🐪</span></div>
+          <div class="track">
+            <div class="finish-area"></div>
+            <div class="finish-line"></div><span class="camel" data-camel="0">🐪</span>
+          </div>
+          <div class="track">
+            <div class="finish-area"></div>
+            <div class="finish-line"></div><span class="camel" data-camel="1">🐪</span>
+          </div>
+          <div class="track">
+            <div class="finish-area"></div>
+            <div class="finish-line"></div><span class="camel" data-camel="2">🐪</span>
+          </div>
+          <div class="track">
+            <div class="finish-area"></div>
+            <div class="finish-line"></div><span class="camel" data-camel="3">🐪</span>
+          </div>
         </div>
         <div id="result"></div>
       </div>
@@ -576,4 +639,5 @@
   </script>
 
 </body>
+
 </html>
