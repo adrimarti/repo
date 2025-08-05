@@ -6,26 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CASTASOUND</title>
   <style>
-    html,
-    body {
+    #home-root {
       margin: 0;
       padding: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background: black;
       color: white;
       font-family: 'Courier New', Courier, monospace;
       overflow: hidden;
-    }
-
-    body {
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
     }
 
-    .background {
+    #home-root .background {
       position: fixed;
       top: 0;
       left: 0;
@@ -48,7 +44,7 @@
       }
     }
 
-    .overlay {
+    #home-root .overlay {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -61,19 +57,19 @@
       box-sizing: border-box;
     }
 
-    h1,
-    h2 {
+    #home-root .overlay h1,
+    #home-root .overlay h2 {
       font-size: 14vw;
       white-space: nowrap;
       text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
       margin: 0;
     }
 
-    h2 {
+    #home-root .overlay h2 {
       font-size: 10vw;
     }
 
-    .fade-text {
+    #home-root .fade-text {
       margin-top: 1.5rem;
       font-size: 4.5vw;
       color: rgba(255, 255, 255, 0.6);
@@ -81,7 +77,7 @@
       text-align: center;
     }
 
-    .spotify-icon {
+    #home-root .spotify-icon {
       position: fixed;
       bottom: 16px;
       right: 16px;
@@ -106,32 +102,32 @@
     }
 
     @media screen and (max-width: 600px) {
-      h1 {
+      #home-root .overlay h1 {
         font-size: 18vw;
       }
 
-      h2 {
+      #home-root .overlay h2 {
         font-size: 14vw;
       }
 
-      .fade-text {
+      #home-root .fade-text {
         font-size: 5vw;
       }
 
-      .spotify-icon {
+      #home-root .spotify-icon {
         width: 36px;
         height: 36px;
         bottom: 12px;
         right: 12px;
       }
 
-      .overlay {
+      #home-root .overlay {
         width: 95vw;
         padding: 1.5rem;
       }
     }
 
-    .fade-in {
+    #home-root .fade-in {
       opacity: 1;
       transform: scale(1);
       transition: opacity 1.2s cubic-bezier(.6, 0, .4, 1), transform 1.2s cubic-bezier(.6, 0, .4, 1);
@@ -139,85 +135,469 @@
       z-index: 2;
     }
 
-    .fade-out {
+    #home-root .fade-out {
       opacity: 0;
       transform: scale(0.95);
       transition: opacity 1.2s cubic-bezier(.6, 0, .4, 1), transform 1.2s cubic-bezier(.6, 0, .4, 1);
       pointer-events: none;
       z-index: 1;
     }
+
+    #teaser-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #teaser-overlay iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      font-size: 2rem;
+      color: #fff;
+    }
+
+    #game-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    #game-overlay h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #game-container {
+      width: 100%;
+      max-width: 600px;
+      box-sizing: border-box;
+    }
+
+    #camels {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .bet-btn {
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      background: #444;
+      border: 2px solid #888;
+      border-radius: 8px;
+      color: #fff;
+    }
+
+    .bet-btn.selected {
+      background: #0a0;
+    }
+
+    #race-track {
+      width: 100%;
+      max-width: 600px;
+      margin-top: 1rem;
+    }
+
+    @media (orientation: landscape) {
+      #race-track {
+        max-width: 800px;
+      }
+    }
+
+    @media (orientation: portrait) {
+      #game-overlay {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+      }
+    }
+
+    .track {
+      position: relative;
+      height: 40px;
+      background: #654321;
+      margin: 0.5rem 0;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .track:nth-child(even) {
+      background: #86592d;
+    }
+
+    .camel {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 32px;
+    }
+
+    .finish-line {
+      position: absolute;
+      left: 30px;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: #fff;
+    }
+
+    .finish-area {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 30px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .camel-btn {
+      display: none;
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid #f0f;
+      font-size: 2rem;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px #f0f, 0 0 20px #f0f;
+      opacity: 0.8;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .camel-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    #result {
+      margin-top: 1rem;
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
-  <div class="background"></div>
-  <div class="overlay">
-    <div class="title-swap-container">
-      <h1 id="castasound-title" class="main-title fade-in">CASTASOUND</h1>
-      <h2 id="castasound-countdown" class="main-title fade-out" style="display:none;"></h2>
+  <div id="home-root">
+    <div id="game-overlay">
+      <div id="game-container">
+        <h2>Apuesta al camello ganador</h2>
+        <div id="camels">
+          <button class="bet-btn" data-camel="0">🐪 1</button>
+          <button class="bet-btn" data-camel="1">🐪 2</button>
+          <button class="bet-btn" data-camel="2">🐪 3</button>
+          <button class="bet-btn" data-camel="3">🐪 4</button>
+        </div>
+        <button id="start-race" disabled>Iniciar carrera</button>
+        <div id="race-track" style="display:none;">
+          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="0">🐪</span></div>
+          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="1">🐪</span></div>
+          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="2">🐪</span></div>
+          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="3">🐪</span></div>
+        </div>
+        <div id="result"></div>
+      </div>
     </div>
-    <div class="fade-text">algo se juega en el monte...</div>
+    <div id="loading-overlay">cargando...</div>
+    <div class="background"></div>
+    <div class="overlay">
+      <div class="title-swap-container">
+        <h1 id="castasound-title" class="main-title fade-in">CASTASOUND</h1>
+        <h2 id="castasound-countdown" class="main-title fade-out" style="display:none;"></h2>
+      </div>
+      <div class="fade-text">algo se juega en el monte...</div>
+    </div>
+    <button id="camel-btn" class="camel-btn">🐪</button>
+    <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY?si=23e250d810ae44da&pt=68d60e19c28a99ff9552b0795ac7d476" target="_blank" rel="noopener">
+      <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
+    </a>
   </div>
-  <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY?si=23e250d810ae44da&pt=68d60e19c28a99ff9552b0795ac7d476" target="_blank" rel="noopener">
-    <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
-  </a>
 
   <script>
     (() => {
       const fechaEvento = new Date("2025-08-16T18:00:00");
+      const loadingOverlay = document.getElementById('loading-overlay');
+      let fadeTimeout, hideTimeout, removeTimeout, initialTimeout;
+      let countdownId, swapId, raceInterval;
+      let mainStarted = false;
 
-      function actualizarCountdown() {
-        const ahora = new Date();
-        let diff = Math.floor((fechaEvento - ahora) / 1000);
-        if (diff < 0) diff = 0;
+      function playTeaser() {
+        const overlay = document.createElement('div');
+        overlay.id = 'teaser-overlay';
+        overlay.innerHTML = `
+          <iframe src="https://www.youtube.com/embed/Ii-w6KwuOAA?autoplay=1&controls=0&modestbranding=1&rel=0&playsinline=1" allow="autoplay"></iframe>
+        `;
+        document.body.appendChild(overlay);
+        const iframe = overlay.querySelector('iframe');
 
-        const dias = Math.floor(diff / 86400);
-        diff %= 86400;
-        const horas = Math.floor(diff / 3600);
-        diff %= 3600;
-        const minutos = Math.floor(diff / 60);
-        const segundos = diff % 60;
+        fadeTimeout = setTimeout(() => {
+          iframe.style.transition = 'opacity 1s ease';
+          iframe.style.opacity = '0';
+          hideTimeout = setTimeout(() => {
+            overlay.style.transition = 'opacity 1s ease';
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+          }, 1000);
+        }, 10000);
 
-        let str = "";
-        if (dias > 0) str += `${dias}d`;
-        if (horas > 0 || dias > 0) str += `${horas}h`;
-        str += `${minutos}m${segundos}s`;
-
-        document.getElementById("castasound-countdown").textContent = str;
+        removeTimeout = setTimeout(() => overlay.remove(), 31000);
       }
 
-      actualizarCountdown();
-      const countdownId = setInterval(actualizarCountdown, 1000);
+      function startCountdown() {
+        function actualizarCountdown() {
+          const ahora = new Date();
+          let diff = Math.floor((fechaEvento - ahora) / 1000);
+          if (diff < 0) diff = 0;
 
-      let mostrandoTitulo = true;
-      const swapId = setInterval(() => {
+          const dias = Math.floor(diff / 86400);
+          diff %= 86400;
+          const horas = Math.floor(diff / 3600);
+          diff %= 3600;
+          const minutos = Math.floor(diff / 60);
+          const segundos = diff % 60;
+
+          let str = "";
+          if (dias > 0) str += `${dias}d`;
+          if (horas > 0 || dias > 0) str += `${horas}h`;
+          str += `${minutos}m${segundos}s`;
+
+          document.getElementById("castasound-countdown").textContent = str;
+        }
+
+        actualizarCountdown();
+        countdownId = setInterval(actualizarCountdown, 1000);
+
+        let mostrandoTitulo = true;
         const titulo = document.getElementById("castasound-title");
         const countdown = document.getElementById("castasound-countdown");
-        if (mostrandoTitulo) {
-          titulo.classList.remove("fade-in");
-          titulo.classList.add("fade-out");
-          countdown.classList.remove("fade-out");
-          countdown.classList.add("fade-in");
-          setTimeout(() => {
-            titulo.style.display = "none";
-            countdown.style.display = "block";
-          }, 1200);
-        } else {
-          countdown.classList.remove("fade-in");
-          countdown.classList.add("fade-out");
-          titulo.classList.remove("fade-out");
-          titulo.classList.add("fade-in");
-          setTimeout(() => {
-            countdown.style.display = "none";
-            titulo.style.display = "block";
-          }, 1200);
+        swapId = setInterval(() => {
+          if (mostrandoTitulo) {
+            titulo.classList.remove("fade-in");
+            titulo.classList.add("fade-out");
+            countdown.classList.remove("fade-out");
+            countdown.classList.add("fade-in");
+            setTimeout(() => {
+              titulo.style.display = "none";
+              countdown.style.display = "block";
+            }, 1200);
+          } else {
+            countdown.classList.remove("fade-in");
+            countdown.classList.add("fade-out");
+            titulo.classList.remove("fade-out");
+            titulo.classList.add("fade-in");
+            setTimeout(() => {
+              countdown.style.display = "none";
+              titulo.style.display = "block";
+            }, 1200);
+          }
+          mostrandoTitulo = !mostrandoTitulo;
+        }, 7000);
+      }
+
+      function startMain() {
+        if (mainStarted) return;
+        mainStarted = true;
+        startCountdown();
+      }
+
+      function showLoadingAndTeaser() {
+        if (loadingOverlay) {
+          loadingOverlay.style.display = 'flex';
         }
-        mostrandoTitulo = !mostrandoTitulo;
-      }, 7000);
+        initialTimeout = setTimeout(() => {
+          playTeaser();
+          if (loadingOverlay) loadingOverlay.remove();
+        }, 5000);
+      }
+
+      // game logic
+      let selected = null;
+      const betButtons = document.querySelectorAll('.bet-btn');
+      const startBtn = document.getElementById('start-race');
+      const raceTrack = document.getElementById('race-track');
+      const camels = Array.from(document.querySelectorAll('.camel'));
+      const resultDiv = document.getElementById('result');
+      const enterBtn = document.createElement('button');
+      enterBtn.textContent = 'Entrar';
+      const camelBtn = document.getElementById('camel-btn');
+      const gameOverlay = document.getElementById('game-overlay');
+      const raceDuration = 20000; // duración aproximada de la carrera (20s)
+      const interval = 30;
+      let trackWidth = 0;
+      let baseSpeed = 0;
+      let positions = [];
+      let speedFactors = [];
+      let speeds = [];
+
+      function updateTrackMetrics() {
+        const trackEl = raceTrack.querySelector('.track');
+        const camelWidth = camels[0].offsetWidth || 32;
+        const finishOffset = 30; // zona previa a la línea de meta
+        const newWidth = trackEl.clientWidth - camelWidth - finishOffset;
+        const ratio = trackWidth ? newWidth / trackWidth : 1;
+        trackWidth = newWidth;
+        baseSpeed = trackWidth / (raceDuration / interval);
+        speeds = speedFactors.map(f => baseSpeed * f);
+        positions.forEach((pos, i) => {
+          positions[i] = pos * ratio;
+          camels[i].style.right = positions[i] + 'px';
+        });
+      }
+
+      window.addEventListener('resize', updateTrackMetrics);
+
+      function resetGame() {
+        betButtons.forEach(b => { b.disabled = false; b.classList.remove('selected'); });
+        startBtn.disabled = true;
+        resultDiv.textContent = '';
+        raceTrack.style.display = 'none';
+        positions = camels.map(() => 0);
+        camels.forEach(c => { c.style.right = '0'; });
+        selected = null;
+      }
+
+      function positionCamelBtn() {
+        const overlay = document.querySelector('#home-root .overlay');
+        const rect = overlay.getBoundingClientRect();
+        camelBtn.style.top = rect.bottom + 20 + 'px';
+        camelBtn.style.left = rect.left + rect.width / 2 + 'px';
+        camelBtn.style.transform = 'translateX(-50%)';
+      }
+
+      function showCamelButton() {
+        camelBtn.style.display = 'flex';
+        positionCamelBtn();
+      }
+
+      window.addEventListener('resize', () => {
+        if (camelBtn.style.display !== 'none') positionCamelBtn();
+      });
+
+      betButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          selected = Number(btn.dataset.camel);
+          betButtons.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          startBtn.disabled = false;
+        });
+      });
+
+      startBtn.addEventListener('click', () => {
+        startBtn.disabled = true;
+        betButtons.forEach(b => b.disabled = true);
+        resultDiv.textContent = '';
+        enterBtn.remove();
+        raceTrack.style.display = 'block';
+        camels.forEach(c => c.style.right = '0');
+        positions = camels.map(() => 0);
+        speedFactors = camels.map(() => 0.85 + Math.random() * 0.3);
+        updateTrackMetrics();
+
+        raceInterval = setInterval(() => {
+          let winner = null;
+          camels.forEach((camel, i) => {
+            positions[i] += speeds[i] * (1 + Math.random() * 0.2);
+            camel.style.right = positions[i] + 'px';
+            if (positions[i] >= trackWidth && winner === null) {
+              winner = i;
+            }
+          });
+          if (winner !== null) {
+            clearInterval(raceInterval);
+            if (winner === selected) {
+              resultDiv.textContent = '¡Ganaste!';
+              resultDiv.appendChild(enterBtn);
+            } else {
+              resultDiv.innerHTML = 'Has perdido<br>';
+              const retryBtn = document.createElement('button');
+              retryBtn.textContent = 'Jugar de nuevo';
+              retryBtn.className = 'bet-btn';
+              retryBtn.addEventListener('click', () => {
+                resetGame();
+              });
+              resultDiv.appendChild(retryBtn);
+            }
+          }
+        }, interval);
+      });
+
+      enterBtn.addEventListener('click', () => {
+        sessionStorage.setItem('camelWon', 'true');
+        if (gameOverlay) gameOverlay.style.display = 'none';
+        startMain();
+        showCamelButton();
+        resetGame();
+        showLoadingAndTeaser();
+      });
+
+      camelBtn.addEventListener('click', () => {
+        camelBtn.style.display = 'none';
+        resetGame();
+        gameOverlay.style.display = 'flex';
+      });
+
+      if (sessionStorage.getItem('camelWon') === 'true') {
+        gameOverlay.style.display = 'none';
+        startMain();
+        showCamelButton();
+        resetGame();
+      }
 
       window.currentCleanup = () => {
         clearInterval(countdownId);
         clearInterval(swapId);
+        clearInterval(raceInterval);
+        clearTimeout(initialTimeout);
+        clearTimeout(fadeTimeout);
+        clearTimeout(hideTimeout);
+        clearTimeout(removeTimeout);
+        const loading = document.getElementById('loading-overlay');
+        if (loading) loading.remove();
+        const overlay = document.getElementById('teaser-overlay');
+        if (overlay) overlay.remove();
+        const game = document.getElementById('game-overlay');
+        if (game) game.remove();
+        window.removeEventListener('resize', updateTrackMetrics);
       };
     })();
   </script>
