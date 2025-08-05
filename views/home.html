@@ -191,6 +191,8 @@
       justify-content: center;
       z-index: 10000;
       font-family: 'Courier New', Courier, monospace;
+      padding: 1rem;
+      box-sizing: border-box;
     }
 
     #game-overlay h2 {
@@ -226,6 +228,13 @@
     @media (orientation: landscape) {
       #race-track {
         width: 90%;
+      }
+    }
+
+    @media (orientation: portrait) {
+      #game-overlay {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
       }
     }
 
@@ -412,6 +421,9 @@
         if (mainStarted) return;
         mainStarted = true;
         startCountdown();
+      }
+
+      function showLoadingAndTeaser() {
         if (loadingOverlay) {
           loadingOverlay.style.display = 'flex';
         }
@@ -443,7 +455,7 @@
       function updateTrackMetrics() {
         const trackEl = raceTrack.querySelector('.track');
         const camelWidth = camels[0].offsetWidth || 32;
-        const finishOffset = 34; // zona coloreada + línea
+        const finishOffset = 30; // zona previa a la línea de meta
         const newWidth = trackEl.clientWidth - camelWidth - finishOffset;
         const ratio = trackWidth ? newWidth / trackWidth : 1;
         trackWidth = newWidth;
@@ -519,6 +531,7 @@
         startMain();
         showCamelButton();
         resetGame();
+        showLoadingAndTeaser();
       });
 
       camelBtn.addEventListener('click', () => {
