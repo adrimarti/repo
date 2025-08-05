@@ -6,26 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CASTASOUND</title>
   <style>
-    html,
-    body {
+    #home-root {
       margin: 0;
       padding: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background: black;
       color: white;
       font-family: 'Courier New', Courier, monospace;
       overflow: hidden;
-    }
-
-    body {
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
     }
 
-    .background {
+    #home-root .background {
       position: fixed;
       top: 0;
       left: 0;
@@ -48,7 +44,7 @@
       }
     }
 
-    .overlay {
+    #home-root .overlay {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -61,19 +57,19 @@
       box-sizing: border-box;
     }
 
-    h1,
-    h2 {
+    #home-root h1,
+    #home-root h2 {
       font-size: 14vw;
       white-space: nowrap;
       text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
       margin: 0;
     }
 
-    h2 {
+    #home-root h2 {
       font-size: 10vw;
     }
 
-    .fade-text {
+    #home-root .fade-text {
       margin-top: 1.5rem;
       font-size: 4.5vw;
       color: rgba(255, 255, 255, 0.6);
@@ -81,7 +77,7 @@
       text-align: center;
     }
 
-    .spotify-icon {
+    #home-root .spotify-icon {
       position: fixed;
       bottom: 16px;
       right: 16px;
@@ -106,32 +102,32 @@
     }
 
     @media screen and (max-width: 600px) {
-      h1 {
+      #home-root h1 {
         font-size: 18vw;
       }
 
-      h2 {
+      #home-root h2 {
         font-size: 14vw;
       }
 
-      .fade-text {
+      #home-root .fade-text {
         font-size: 5vw;
       }
 
-      .spotify-icon {
+      #home-root .spotify-icon {
         width: 36px;
         height: 36px;
         bottom: 12px;
         right: 12px;
       }
 
-      .overlay {
+      #home-root .overlay {
         width: 95vw;
         padding: 1.5rem;
       }
     }
 
-    .fade-in {
+    #home-root .fade-in {
       opacity: 1;
       transform: scale(1);
       transition: opacity 1.2s cubic-bezier(.6, 0, .4, 1), transform 1.2s cubic-bezier(.6, 0, .4, 1);
@@ -139,7 +135,7 @@
       z-index: 2;
     }
 
-    .fade-out {
+    #home-root .fade-out {
       opacity: 0;
       transform: scale(0.95);
       transition: opacity 1.2s cubic-bezier(.6, 0, .4, 1), transform 1.2s cubic-bezier(.6, 0, .4, 1);
@@ -207,10 +203,14 @@
       font-size: 1.5rem;
       padding: 0.5rem 1rem;
       cursor: pointer;
+      background: #444;
+      border: 2px solid #888;
+      border-radius: 8px;
+      color: #fff;
     }
 
     .bet-btn.selected {
-      background: #333;
+      background: #0a0;
     }
 
     #race-track {
@@ -221,10 +221,14 @@
     .track {
       position: relative;
       height: 40px;
-      background: #222;
+      background: #654321;
       margin: 0.5rem 0;
       border-radius: 20px;
       overflow: hidden;
+    }
+
+    .track:nth-child(even) {
+      background: #86592d;
     }
 
     .camel {
@@ -252,35 +256,39 @@
 </head>
 
 <body>
-  <div id="game-overlay">
-    <div id="game-container">
-      <h2>Apuesta al camello ganador</h2>
-      <div id="camels">
-        <button class="bet-btn" data-camel="0">🐪 1</button>
-        <button class="bet-btn" data-camel="1">🐪 2</button>
-        <button class="bet-btn" data-camel="2">🐪 3</button>
+  <div id="home-root">
+    <div id="game-overlay">
+      <div id="game-container">
+        <h2>Apuesta al camello ganador</h2>
+        <div id="camels">
+          <button class="bet-btn" data-camel="0">🐪 1</button>
+          <button class="bet-btn" data-camel="1">🐪 2</button>
+          <button class="bet-btn" data-camel="2">🐪 3</button>
+          <button class="bet-btn" data-camel="3">🐪 4</button>
+        </div>
+        <button id="start-race" disabled>Iniciar carrera</button>
+        <div id="race-track" style="display:none;">
+          <div class="track"><span class="camel" data-camel="0">🐪</span><div class="finish-line"></div></div>
+          <div class="track"><span class="camel" data-camel="1">🐪</span><div class="finish-line"></div></div>
+          <div class="track"><span class="camel" data-camel="2">🐪</span><div class="finish-line"></div></div>
+          <div class="track"><span class="camel" data-camel="3">🐪</span><div class="finish-line"></div></div>
+        </div>
+        <div id="result"></div>
       </div>
-      <button id="start-race" disabled>Iniciar carrera</button>
-      <div id="race-track" style="display:none;">
-        <div class="track"><span class="camel" data-camel="0">🐪</span><div class="finish-line"></div></div>
-        <div class="track"><span class="camel" data-camel="1">🐪</span><div class="finish-line"></div></div>
-        <div class="track"><span class="camel" data-camel="2">🐪</span><div class="finish-line"></div></div>
+    </div>
+    <div id="loading-overlay">cargando...</div>
+    <div class="background"></div>
+    <div class="overlay">
+      <div class="title-swap-container">
+        <h1 id="castasound-title" class="main-title fade-in">CASTASOUND</h1>
+        <h2 id="castasound-countdown" class="main-title fade-out" style="display:none;"></h2>
       </div>
-      <div id="result"></div>
+      <div class="fade-text">algo se juega en el monte...</div>
     </div>
+    <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY?si=23e250d810ae44da&pt=68d60e19c28a99ff9552b0795ac7d476" target="_blank" rel="noopener">
+      <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
+    </a>
   </div>
-  <div id="loading-overlay">cargando...</div>
-  <div class="background"></div>
-  <div class="overlay">
-    <div class="title-swap-container">
-      <h1 id="castasound-title" class="main-title fade-in">CASTASOUND</h1>
-      <h2 id="castasound-countdown" class="main-title fade-out" style="display:none;"></h2>
-    </div>
-    <div class="fade-text">algo se juega en el monte...</div>
-  </div>
-  <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY?si=23e250d810ae44da&pt=68d60e19c28a99ff9552b0795ac7d476" target="_blank" rel="noopener">
-    <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
-  </a>
 
   <script>
     (() => {
@@ -382,6 +390,8 @@
       const resultDiv = document.getElementById('result');
       const enterBtn = document.createElement('button');
       enterBtn.textContent = 'Entrar';
+      const raceDuration = 10000;
+      const interval = 30;
 
       betButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -395,15 +405,18 @@
       startBtn.addEventListener('click', () => {
         startBtn.disabled = true;
         betButtons.forEach(b => b.disabled = true);
+        resultDiv.textContent = '';
+        enterBtn.remove();
         raceTrack.style.display = 'block';
         camels.forEach(c => c.style.left = '0');
-        const trackWidth = raceTrack.clientWidth - 40;
-        const positions = [0, 0, 0];
+        const trackWidth = raceTrack.querySelector('.track').clientWidth - 40;
+        const baseSpeed = trackWidth / (raceDuration / interval);
+        const positions = camels.map(() => 0);
 
         raceInterval = setInterval(() => {
           let winner = null;
           camels.forEach((camel, i) => {
-            positions[i] += Math.random() * 3 + 1;
+            positions[i] += baseSpeed + Math.random() * baseSpeed * 0.5;
             camel.style.left = positions[i] + 'px';
             if (positions[i] >= trackWidth && winner === null) {
               winner = i;
@@ -419,9 +432,11 @@
               betButtons.forEach(b => { b.disabled = false; b.classList.remove('selected'); });
               startBtn.disabled = true;
               selected = null;
+              raceTrack.style.display = 'none';
+              camels.forEach(c => c.style.left = '0');
             }
           }
-        }, 30);
+        }, interval);
       });
 
       enterBtn.addEventListener('click', () => {
