@@ -17,4 +17,4 @@ Solo abre `index.html` en tu navegador. Navega entre secciones utilizando el men
 - próximamente más misterios
 
 ## Carrera de camellos
-El minijuego de camellos ahora es más impredecible: cada camello puede avanzar o retroceder de forma torpe antes de llegar a la meta.
+El minijuego de camellos ahora es más impredecible: cada camello puede avanzar o retroceder de forma torpe antes de llegar a la meta, y a veces uno recibe una ventaja o desventaja para que ningún color domine siempre. Si varios camellos cruzan la meta al mismo tiempo, el ganador se elige al azar para evitar que el orden de procesamiento beneficie a alguno.

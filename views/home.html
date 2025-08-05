@@ -629,27 +629,44 @@
         raceTrack.style.display = 'block';
         camels.forEach(c => c.style.right = '0');
         positions = camels.map(() => 0);
-        speedFactors = camels.map(() => 0.85 + Math.random() * 0.3);
+        speedFactors = camels.map(() => 0.8 + Math.random() * 0.4);
+        if (Math.random() < 0.25) {
+          const favored = Math.floor(Math.random() * camels.length);
+          speedFactors[favored] += 0.5 + Math.random() * 0.4;
+        }
         updateTrackMetrics();
 
         raceInterval = setInterval(() => {
-          let winner = null;
-          const backwardBaseChance = 0.15; // probabilidad base de ir hacia atrás
-          const backwardExtraChance = 0.1; // probabilidad extra si va muy adelantado
-          camels.forEach((camel, i) => {
+          const backwardBaseChance = 0.1; // probabilidad base de ir hacia atrás
+          const backwardExtraChance = 0.2; // probabilidad extra si va muy adelantado
+          const indices = camels.map((_, i) => i).sort(() => Math.random() - 0.5);
+          indices.forEach(i => {
+            const camel = camels[i];
             const relativeProgress = positions[i] / trackWidth;
             const backwardChance = backwardBaseChance + (relativeProgress * backwardExtraChance);
-            const direction = Math.random() < backwardChance ? -1 : 1;
-            const randomness = 0.5 + Math.random() * 1.0; // entre 0.5 y 1.5
+            let direction = Math.random() < backwardChance ? -1 : 1;
+            let randomness = 0.4 + Math.random() * 1.6; // entre 0.4 y 2.0
+            const eventRoll = Math.random();
+            if (eventRoll < 0.05) {
+              direction = 1;
+              randomness *= 3;
+            } else if (eventRoll > 0.95) {
+              direction = -1;
+              randomness *= 3;
+            }
             positions[i] += speeds[i] * randomness * direction;
             if (positions[i] < 0) positions[i] = 0;
             camel.style.right = positions[i] + 'px';
-            if (positions[i] >= trackWidth && winner === null) {
-              winner = i;
-            }
           });
-          if (winner !== null) {
+          const maxPos = Math.max(...positions);
+          if (maxPos >= trackWidth) {
             clearInterval(raceInterval);
+            const contenders = positions
+              .map((pos, idx) => ({ pos, idx }))
+              .filter(p => p.pos >= trackWidth);
+            const topPos = Math.max(...contenders.map(c => c.pos));
+            const top = contenders.filter(c => c.pos === topPos);
+            const winner = top[Math.floor(Math.random() * top.length)].idx;
             if (winner === selected) {
               resultDiv.textContent = '¡Ganaste!';
               resultDiv.appendChild(enterBtn);
