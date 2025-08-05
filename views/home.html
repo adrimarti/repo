@@ -244,7 +244,7 @@
 
     .camel {
       position: absolute;
-      left: 0;
+      right: 0;
       top: 50%;
       transform: translateY(-50%);
       font-size: 32px;
@@ -252,11 +252,36 @@
 
     .finish-line {
       position: absolute;
-      right: 0;
+      left: 30px;
       top: 0;
       width: 4px;
       height: 100%;
       background: #fff;
+    }
+
+    .finish-area {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 30px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .camel-btn {
+      display: none;
+      margin-top: 1rem;
+      background: transparent;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      opacity: 0.2;
+      filter: drop-shadow(0 0 3px #fff);
+      transition: opacity 0.3s;
+    }
+
+    .camel-btn:hover {
+      opacity: 0.5;
     }
 
     #result {
@@ -279,10 +304,10 @@
         </div>
         <button id="start-race" disabled>Iniciar carrera</button>
         <div id="race-track" style="display:none;">
-          <div class="track"><span class="camel" data-camel="0">🐪</span><div class="finish-line"></div></div>
-          <div class="track"><span class="camel" data-camel="1">🐪</span><div class="finish-line"></div></div>
-          <div class="track"><span class="camel" data-camel="2">🐪</span><div class="finish-line"></div></div>
-          <div class="track"><span class="camel" data-camel="3">🐪</span><div class="finish-line"></div></div>
+          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="0">🐪</span></div>
+          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="1">🐪</span></div>
+          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="2">🐪</span></div>
+          <div class="track"><div class="finish-area"></div><div class="finish-line"></div><span class="camel" data-camel="3">🐪</span></div>
         </div>
         <div id="result"></div>
       </div>
@@ -295,6 +320,7 @@
         <h2 id="castasound-countdown" class="main-title fade-out" style="display:none;"></h2>
       </div>
       <div class="fade-text">algo se juega en el monte...</div>
+      <button id="camel-btn" class="camel-btn">🐪</button>
     </div>
     <a href="https://open.spotify.com/playlist/0cHgQcxLaEvVnEiQLEJFeY?si=23e250d810ae44da&pt=68d60e19c28a99ff9552b0795ac7d476" target="_blank" rel="noopener">
       <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
@@ -307,6 +333,7 @@
       const loadingOverlay = document.getElementById('loading-overlay');
       let fadeTimeout, hideTimeout, removeTimeout, initialTimeout;
       let countdownId, swapId, raceInterval;
+      let mainStarted = false;
 
       function playTeaser() {
         const overlay = document.createElement('div');
@@ -382,6 +409,8 @@
       }
 
       function startMain() {
+        if (mainStarted) return;
+        mainStarted = true;
         startCountdown();
         if (loadingOverlay) {
           loadingOverlay.style.display = 'flex';
@@ -401,6 +430,8 @@
       const resultDiv = document.getElementById('result');
       const enterBtn = document.createElement('button');
       enterBtn.textContent = 'Entrar';
+      const camelBtn = document.getElementById('camel-btn');
+      const gameOverlay = document.getElementById('game-overlay');
       const raceDuration = 20000; // duración aproximada de la carrera (20s)
       const interval = 30;
       let trackWidth = 0;
@@ -411,18 +442,34 @@
 
       function updateTrackMetrics() {
         const trackEl = raceTrack.querySelector('.track');
-        const newWidth = trackEl.clientWidth - 40;
+        const camelWidth = camels[0].offsetWidth || 32;
+        const finishOffset = 34; // zona coloreada + línea
+        const newWidth = trackEl.clientWidth - camelWidth - finishOffset;
         const ratio = trackWidth ? newWidth / trackWidth : 1;
         trackWidth = newWidth;
         baseSpeed = trackWidth / (raceDuration / interval);
         speeds = speedFactors.map(f => baseSpeed * f);
         positions.forEach((pos, i) => {
           positions[i] = pos * ratio;
-          camels[i].style.left = positions[i] + 'px';
+          camels[i].style.right = positions[i] + 'px';
         });
       }
 
       window.addEventListener('resize', updateTrackMetrics);
+
+      function resetGame() {
+        betButtons.forEach(b => { b.disabled = false; b.classList.remove('selected'); });
+        startBtn.disabled = true;
+        resultDiv.textContent = '';
+        raceTrack.style.display = 'none';
+        positions = camels.map(() => 0);
+        camels.forEach(c => { c.style.right = '0'; });
+        selected = null;
+      }
+
+      function showCamelButton() {
+        camelBtn.style.display = 'block';
+      }
 
       betButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -439,7 +486,7 @@
         resultDiv.textContent = '';
         enterBtn.remove();
         raceTrack.style.display = 'block';
-        camels.forEach(c => c.style.left = '0');
+        camels.forEach(c => c.style.right = '0');
         positions = camels.map(() => 0);
         speedFactors = camels.map(() => 0.85 + Math.random() * 0.3);
         updateTrackMetrics();
@@ -448,7 +495,7 @@
           let winner = null;
           camels.forEach((camel, i) => {
             positions[i] += speeds[i] * (1 + Math.random() * 0.2);
-            camel.style.left = positions[i] + 'px';
+            camel.style.right = positions[i] + 'px';
             if (positions[i] >= trackWidth && winner === null) {
               winner = i;
             }
@@ -460,21 +507,32 @@
               resultDiv.appendChild(enterBtn);
             } else {
               resultDiv.textContent = 'Perdiste, intenta de nuevo';
-              betButtons.forEach(b => { b.disabled = false; b.classList.remove('selected'); });
-              startBtn.disabled = true;
-              selected = null;
-              raceTrack.style.display = 'none';
-              camels.forEach(c => c.style.left = '0');
+              resetGame();
             }
           }
         }, interval);
       });
 
       enterBtn.addEventListener('click', () => {
-        const gameOverlay = document.getElementById('game-overlay');
-        if (gameOverlay) gameOverlay.remove();
+        sessionStorage.setItem('camelWon', 'true');
+        if (gameOverlay) gameOverlay.style.display = 'none';
         startMain();
+        showCamelButton();
+        resetGame();
       });
+
+      camelBtn.addEventListener('click', () => {
+        camelBtn.style.display = 'none';
+        resetGame();
+        gameOverlay.style.display = 'flex';
+      });
+
+      if (sessionStorage.getItem('camelWon') === 'true') {
+        gameOverlay.style.display = 'none';
+        startMain();
+        showCamelButton();
+        resetGame();
+      }
 
       window.currentCleanup = () => {
         clearInterval(countdownId);
