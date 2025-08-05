@@ -624,7 +624,10 @@
         raceInterval = setInterval(() => {
           let winner = null;
           camels.forEach((camel, i) => {
-            positions[i] += speeds[i] * (1 + Math.random() * 0.2);
+            const direction = Math.random() < 0.15 ? -1 : 1;
+            const randomness = 0.6 + Math.random() * 0.8;
+            positions[i] += speeds[i] * randomness * direction;
+            if (positions[i] < 0) positions[i] = 0;
             camel.style.right = positions[i] + 'px';
             if (positions[i] >= trackWidth && winner === null) {
               winner = i;
