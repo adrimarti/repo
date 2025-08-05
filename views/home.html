@@ -173,17 +173,102 @@
       width: 100%;
       height: 100%;
       background: #000;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       z-index: 9998;
       font-size: 2rem;
       color: #fff;
     }
+
+    #game-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #camels {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .bet-btn {
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+
+    .bet-btn.selected {
+      background: #333;
+    }
+
+    #race-track {
+      width: 80%;
+      margin-top: 1rem;
+    }
+
+    .track {
+      position: relative;
+      height: 40px;
+      background: #222;
+      margin: 0.5rem 0;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .camel {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 32px;
+    }
+
+    .finish-line {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: #fff;
+    }
+
+    #result {
+      margin-top: 1rem;
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
+  <div id="game-overlay">
+    <div id="game-container">
+      <h2>Apuesta al camello ganador</h2>
+      <div id="camels">
+        <button class="bet-btn" data-camel="0">🐪 1</button>
+        <button class="bet-btn" data-camel="1">🐪 2</button>
+        <button class="bet-btn" data-camel="2">🐪 3</button>
+      </div>
+      <button id="start-race" disabled>Iniciar carrera</button>
+      <div id="race-track" style="display:none;">
+        <div class="track"><span class="camel" data-camel="0">🐪</span><div class="finish-line"></div></div>
+        <div class="track"><span class="camel" data-camel="1">🐪</span><div class="finish-line"></div></div>
+        <div class="track"><span class="camel" data-camel="2">🐪</span><div class="finish-line"></div></div>
+      </div>
+      <div id="result"></div>
+    </div>
+  </div>
   <div id="loading-overlay">cargando...</div>
   <div class="background"></div>
   <div class="overlay">
@@ -202,6 +287,7 @@
       const fechaEvento = new Date("2025-08-16T18:00:00");
       const loadingOverlay = document.getElementById('loading-overlay');
       let fadeTimeout, hideTimeout, removeTimeout, initialTimeout;
+      let countdownId, swapId, raceInterval;
 
       function playTeaser() {
         const overlay = document.createElement('div');
@@ -225,63 +311,129 @@
         removeTimeout = setTimeout(() => overlay.remove(), 31000);
       }
 
-      initialTimeout = setTimeout(() => {
-        playTeaser();
-        if (loadingOverlay) loadingOverlay.remove();
-      }, 5000);
+      function startCountdown() {
+        function actualizarCountdown() {
+          const ahora = new Date();
+          let diff = Math.floor((fechaEvento - ahora) / 1000);
+          if (diff < 0) diff = 0;
 
-      function actualizarCountdown() {
-        const ahora = new Date();
-        let diff = Math.floor((fechaEvento - ahora) / 1000);
-        if (diff < 0) diff = 0;
+          const dias = Math.floor(diff / 86400);
+          diff %= 86400;
+          const horas = Math.floor(diff / 3600);
+          diff %= 3600;
+          const minutos = Math.floor(diff / 60);
+          const segundos = diff % 60;
 
-        const dias = Math.floor(diff / 86400);
-        diff %= 86400;
-        const horas = Math.floor(diff / 3600);
-        diff %= 3600;
-        const minutos = Math.floor(diff / 60);
-        const segundos = diff % 60;
+          let str = "";
+          if (dias > 0) str += `${dias}d`;
+          if (horas > 0 || dias > 0) str += `${horas}h`;
+          str += `${minutos}m${segundos}s`;
 
-        let str = "";
-        if (dias > 0) str += `${dias}d`;
-        if (horas > 0 || dias > 0) str += `${horas}h`;
-        str += `${minutos}m${segundos}s`;
+          document.getElementById("castasound-countdown").textContent = str;
+        }
 
-        document.getElementById("castasound-countdown").textContent = str;
-      }
+        actualizarCountdown();
+        countdownId = setInterval(actualizarCountdown, 1000);
 
-      actualizarCountdown();
-      const countdownId = setInterval(actualizarCountdown, 1000);
-
-      let mostrandoTitulo = true;
-      const swapId = setInterval(() => {
+        let mostrandoTitulo = true;
         const titulo = document.getElementById("castasound-title");
         const countdown = document.getElementById("castasound-countdown");
-        if (mostrandoTitulo) {
-          titulo.classList.remove("fade-in");
-          titulo.classList.add("fade-out");
-          countdown.classList.remove("fade-out");
-          countdown.classList.add("fade-in");
-          setTimeout(() => {
-            titulo.style.display = "none";
-            countdown.style.display = "block";
-          }, 1200);
-        } else {
-          countdown.classList.remove("fade-in");
-          countdown.classList.add("fade-out");
-          titulo.classList.remove("fade-out");
-          titulo.classList.add("fade-in");
-          setTimeout(() => {
-            countdown.style.display = "none";
-            titulo.style.display = "block";
-          }, 1200);
+        swapId = setInterval(() => {
+          if (mostrandoTitulo) {
+            titulo.classList.remove("fade-in");
+            titulo.classList.add("fade-out");
+            countdown.classList.remove("fade-out");
+            countdown.classList.add("fade-in");
+            setTimeout(() => {
+              titulo.style.display = "none";
+              countdown.style.display = "block";
+            }, 1200);
+          } else {
+            countdown.classList.remove("fade-in");
+            countdown.classList.add("fade-out");
+            titulo.classList.remove("fade-out");
+            titulo.classList.add("fade-in");
+            setTimeout(() => {
+              countdown.style.display = "none";
+              titulo.style.display = "block";
+            }, 1200);
+          }
+          mostrandoTitulo = !mostrandoTitulo;
+        }, 7000);
+      }
+
+      function startMain() {
+        startCountdown();
+        if (loadingOverlay) {
+          loadingOverlay.style.display = 'flex';
         }
-        mostrandoTitulo = !mostrandoTitulo;
-      }, 7000);
+        initialTimeout = setTimeout(() => {
+          playTeaser();
+          if (loadingOverlay) loadingOverlay.remove();
+        }, 5000);
+      }
+
+      // game logic
+      let selected = null;
+      const betButtons = document.querySelectorAll('.bet-btn');
+      const startBtn = document.getElementById('start-race');
+      const raceTrack = document.getElementById('race-track');
+      const camels = Array.from(document.querySelectorAll('.camel'));
+      const resultDiv = document.getElementById('result');
+      const enterBtn = document.createElement('button');
+      enterBtn.textContent = 'Entrar';
+
+      betButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          selected = Number(btn.dataset.camel);
+          betButtons.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          startBtn.disabled = false;
+        });
+      });
+
+      startBtn.addEventListener('click', () => {
+        startBtn.disabled = true;
+        betButtons.forEach(b => b.disabled = true);
+        raceTrack.style.display = 'block';
+        camels.forEach(c => c.style.left = '0');
+        const trackWidth = raceTrack.clientWidth - 40;
+        const positions = [0, 0, 0];
+
+        raceInterval = setInterval(() => {
+          let winner = null;
+          camels.forEach((camel, i) => {
+            positions[i] += Math.random() * 3 + 1;
+            camel.style.left = positions[i] + 'px';
+            if (positions[i] >= trackWidth && winner === null) {
+              winner = i;
+            }
+          });
+          if (winner !== null) {
+            clearInterval(raceInterval);
+            if (winner === selected) {
+              resultDiv.textContent = '¡Ganaste!';
+              resultDiv.appendChild(enterBtn);
+            } else {
+              resultDiv.textContent = 'Perdiste, intenta de nuevo';
+              betButtons.forEach(b => { b.disabled = false; b.classList.remove('selected'); });
+              startBtn.disabled = true;
+              selected = null;
+            }
+          }
+        }, 30);
+      });
+
+      enterBtn.addEventListener('click', () => {
+        const gameOverlay = document.getElementById('game-overlay');
+        if (gameOverlay) gameOverlay.remove();
+        startMain();
+      });
 
       window.currentCleanup = () => {
         clearInterval(countdownId);
         clearInterval(swapId);
+        clearInterval(raceInterval);
         clearTimeout(initialTimeout);
         clearTimeout(fadeTimeout);
         clearTimeout(hideTimeout);
@@ -290,6 +442,8 @@
         if (loading) loading.remove();
         const overlay = document.getElementById('teaser-overlay');
         if (overlay) overlay.remove();
+        const game = document.getElementById('game-overlay');
+        if (game) game.remove();
       };
     })();
   </script>
