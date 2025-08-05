@@ -6,11 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CASTASOUND</title>
   <style>
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       background: black;
     }
+
     #home-root {
       margin: 0;
       padding: 0;
@@ -212,7 +214,7 @@
       box-sizing: border-box;
       text-align: center;
     }
-    
+
     #camels {
       display: flex;
       gap: 0.5rem;
@@ -220,7 +222,7 @@
       justify-content: center;
       margin: 1rem 0;
     }
-    
+
     .btn {
       font-size: 1.5rem;
       padding: 0.5rem 1rem;
@@ -336,34 +338,42 @@
       color: #d4a017;
       /* Amarillo oscuro */
     }
+
     #camels .bet-btn[data-camel="0"].selected {
       color: black;
-      background:#d4a017;
+      background: #d4a017;
     }
+
     #camels .bet-btn[data-camel="1"] {
       color: #cc3333;
       /* Rojo oscuro */
     }
+
     #camels .bet-btn[data-camel="1"].selected {
       color: black;
-      background:#cc3333;
+      background: #cc3333;
     }
+
     #camels .bet-btn[data-camel="2"] {
       color: #339933;
       /* Verde oscuro */
     }
+
     #camels .bet-btn[data-camel="2"].selected {
       color: black;
-      background:#339933;
+      background: #339933;
     }
+
     #camels .bet-btn[data-camel="3"] {
       color: #1a66cc;
       /* Azul oscuro */
     }
+
     #camels .bet-btn[data-camel="3"].selected {
       color: black;
-      background:#1a66cc;
+      background: #1a66cc;
     }
+
     /* ==== Camellos en pista con doble sombra ==== */
     #race-track .camel[data-camel="0"] {
       text-shadow:
@@ -378,6 +388,7 @@
         0 0 3px #cc3333,
         0 0 8px #ff6666;
     }
+
     #race-track .camel[data-camel="2"] {
       text-shadow:
         0 0 3px #339933,
@@ -623,9 +634,13 @@
 
         raceInterval = setInterval(() => {
           let winner = null;
+          const backwardBaseChance = 0.15; // probabilidad base de ir hacia atrás
+          const backwardExtraChance = 0.1; // probabilidad extra si va muy adelantado
           camels.forEach((camel, i) => {
-            const direction = Math.random() < 0.15 ? -1 : 1;
-            const randomness = 0.6 + Math.random() * 0.8;
+            const relativeProgress = positions[i] / trackWidth;
+            const backwardChance = backwardBaseChance + (relativeProgress * backwardExtraChance);
+            const direction = Math.random() < backwardChance ? -1 : 1;
+            const randomness = 0.5 + Math.random() * 1.0; // entre 0.5 y 1.5
             positions[i] += speeds[i] * randomness * direction;
             if (positions[i] < 0) positions[i] = 0;
             camel.style.right = positions[i] + 'px';
