@@ -57,15 +57,15 @@
       box-sizing: border-box;
     }
 
-    #home-root h1,
-    #home-root h2 {
+    #home-root .overlay h1,
+    #home-root .overlay h2 {
       font-size: 14vw;
       white-space: nowrap;
       text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 20px #0ff;
       margin: 0;
     }
 
-    #home-root h2 {
+    #home-root .overlay h2 {
       font-size: 10vw;
     }
 
@@ -102,11 +102,11 @@
     }
 
     @media screen and (max-width: 600px) {
-      #home-root h1 {
+      #home-root .overlay h1 {
         font-size: 18vw;
       }
 
-      #home-root h2 {
+      #home-root .overlay h2 {
         font-size: 14vw;
       }
 
@@ -193,6 +193,11 @@
       font-family: 'Courier New', Courier, monospace;
     }
 
+    #game-overlay h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
     #camels {
       display: flex;
       gap: 1rem;
@@ -216,6 +221,12 @@
     #race-track {
       width: 80%;
       margin-top: 1rem;
+    }
+
+    @media (orientation: landscape) {
+      #race-track {
+        width: 90%;
+      }
     }
 
     .track {
@@ -390,8 +401,28 @@
       const resultDiv = document.getElementById('result');
       const enterBtn = document.createElement('button');
       enterBtn.textContent = 'Entrar';
-      const raceDuration = 10000;
+      const raceDuration = 20000; // duración aproximada de la carrera (20s)
       const interval = 30;
+      let trackWidth = 0;
+      let baseSpeed = 0;
+      let positions = [];
+      let speedFactors = [];
+      let speeds = [];
+
+      function updateTrackMetrics() {
+        const trackEl = raceTrack.querySelector('.track');
+        const newWidth = trackEl.clientWidth - 40;
+        const ratio = trackWidth ? newWidth / trackWidth : 1;
+        trackWidth = newWidth;
+        baseSpeed = trackWidth / (raceDuration / interval);
+        speeds = speedFactors.map(f => baseSpeed * f);
+        positions.forEach((pos, i) => {
+          positions[i] = pos * ratio;
+          camels[i].style.left = positions[i] + 'px';
+        });
+      }
+
+      window.addEventListener('resize', updateTrackMetrics);
 
       betButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -409,14 +440,14 @@
         enterBtn.remove();
         raceTrack.style.display = 'block';
         camels.forEach(c => c.style.left = '0');
-        const trackWidth = raceTrack.querySelector('.track').clientWidth - 40;
-        const baseSpeed = trackWidth / (raceDuration / interval);
-        const positions = camels.map(() => 0);
+        positions = camels.map(() => 0);
+        speedFactors = camels.map(() => 0.85 + Math.random() * 0.3);
+        updateTrackMetrics();
 
         raceInterval = setInterval(() => {
           let winner = null;
           camels.forEach((camel, i) => {
-            positions[i] += baseSpeed + Math.random() * baseSpeed * 0.5;
+            positions[i] += speeds[i] * (1 + Math.random() * 0.2);
             camel.style.left = positions[i] + 'px';
             if (positions[i] >= trackWidth && winner === null) {
               winner = i;
@@ -459,6 +490,7 @@
         if (overlay) overlay.remove();
         const game = document.getElementById('game-overlay');
         if (game) game.remove();
+        window.removeEventListener('resize', updateTrackMetrics);
       };
     })();
   </script>
