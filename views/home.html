@@ -162,5 +162,65 @@
     <img class="spotify-icon" src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify" />
   </a>
 
+  <script>
+    (() => {
+      const fechaEvento = new Date("2025-08-16T18:00:00");
+
+      function actualizarCountdown() {
+        const ahora = new Date();
+        let diff = Math.floor((fechaEvento - ahora) / 1000);
+        if (diff < 0) diff = 0;
+
+        const dias = Math.floor(diff / 86400);
+        diff %= 86400;
+        const horas = Math.floor(diff / 3600);
+        diff %= 3600;
+        const minutos = Math.floor(diff / 60);
+        const segundos = diff % 60;
+
+        let str = "";
+        if (dias > 0) str += `${dias}d`;
+        if (horas > 0 || dias > 0) str += `${horas}h`;
+        str += `${minutos}m${segundos}s`;
+
+        document.getElementById("castasound-countdown").textContent = str;
+      }
+
+      actualizarCountdown();
+      const countdownId = setInterval(actualizarCountdown, 1000);
+
+      let mostrandoTitulo = true;
+      const swapId = setInterval(() => {
+        const titulo = document.getElementById("castasound-title");
+        const countdown = document.getElementById("castasound-countdown");
+        if (mostrandoTitulo) {
+          titulo.classList.remove("fade-in");
+          titulo.classList.add("fade-out");
+          countdown.classList.remove("fade-out");
+          countdown.classList.add("fade-in");
+          setTimeout(() => {
+            titulo.style.display = "none";
+            countdown.style.display = "block";
+          }, 1200);
+        } else {
+          countdown.classList.remove("fade-in");
+          countdown.classList.add("fade-out");
+          titulo.classList.remove("fade-out");
+          titulo.classList.add("fade-in");
+          setTimeout(() => {
+            countdown.style.display = "none";
+            titulo.style.display = "block";
+          }, 1200);
+        }
+        mostrandoTitulo = !mostrandoTitulo;
+      }, 7000);
+
+      window.currentCleanup = () => {
+        clearInterval(countdownId);
+        clearInterval(swapId);
+      };
+    })();
+  </script>
+
 </body>
 </html>
